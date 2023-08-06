@@ -17,10 +17,10 @@ class Plotter(DataManipulator):
         plt.ylabel("IF")
         plt.show()
 
-    def plot_dict_spikes(self):
+    def plot_dict_spikes(self, cell_name: str):
         color = ["#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
-                 for i in range(len(self.dict))]
-        for i in range(1, len(self.dict) + 1):
+                 for i in range(len(self.dict[cell_name]))]
+        for i in range(1, len(self.dict[cell_name]) + 1):
             spike = f"{i}.spike"
             self.plot_spike(name=spike, color=color[i - 1])
 
