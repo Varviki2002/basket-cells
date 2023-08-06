@@ -8,6 +8,7 @@ from src.datamanipulator import DataManipulator
 class Plotter(DataManipulator):
     def __init__(self, data):
         self.data = data
+        self.dict = DataManipulator.create_dict(all_in_one=False)
         super().__init__(data)
 
     def plot_spike(self, name: str, color: str) -> None:
