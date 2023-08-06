@@ -2,7 +2,7 @@ from random import random
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from datamanipulator import DataManipulator
+from src.datamanipulator import DataManipulator
 
 
 class Plotter(DataManipulator):
