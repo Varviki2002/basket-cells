@@ -5,10 +5,10 @@ import pandas as pd
 class DataManipulator:
     def __init__(self, data):
         self.data = data
-        self.dict = self.create_dict(all_dict=False)
+        self.dict = self.create_dict(all_in_one=False)
 
-    def create_dict(self, all_dict: bool) -> dict:
-        if all_dict:
+    def create_dict(self, all_in_one: bool) -> dict:
+        if all_in_one:
             spike = 1
             gbz_dict = {}
             for name in [x[0] for x in self.data.columns][::2]:
@@ -51,13 +51,13 @@ class DataManipulator:
                         spike += 1
             return gbz_dict
 
-    def create_frame(self, new_dict: dict, spike: str, y: bool):
+    def create_frame(self, cell_name: str, spike: str, y: bool):
         if not y:
-            df = pd.DataFrame.from_dict(new_dict[spike])
+            df = pd.DataFrame.from_dict(self.dict[cell_name][spike])
             df.sort_values(by="relative firing time", ascending=False, inplace=True)
             return df
         else:
-            df = pd.DataFrame.from_dict(new_dict[spike])
+            df = pd.DataFrame.from_dict(self.dict[cell_name][spike])
             df.sort_values(by="relative firing time", ascending=False, inplace=True)
             return df
 
@@ -111,6 +111,22 @@ class DataManipulator:
                                 measure_dict[name][writing]["relative firing time"].append(
                                     self.data[name]["relative firing time"][idx])
                         measure += 1
-        return measure_dict
 
+        n_dict = {}
+        for name in [x[0] for x in self.data.columns][::2]:
+            n_dict[name] = {}
+            for spike in range(1, len(measure_dict[name]) + 1):
+                writing = f"{spike}.measure"
+                n_dict[name][writing] = len(measure_dict[name][writing]["relative firing time"])
+
+        return pd.DataFrame(n_dict).transpose().fillna(0)
+
+    def create_spike_frame(self):
+        n_dict = {}
+        for name in [x[0] for x in self.data.columns][::2]:
+            n_dict[name] = {}
+            for spike in range(1, len(self.dict[name]) + 1):
+                writing = f"{spike}.spike"
+                n_dict[name][writing] = len(self.dict[name][writing]["relative firing time"])
+        return pd.DataFrame(n_dict).transpose().fillna(0)
 
