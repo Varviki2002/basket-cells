@@ -11,8 +11,9 @@ class Plotter(DataManipulator):
         self.dict = DataManipulator.create_dict(all_in_one=False)
         super().__init__(data)
 
-    def plot_spike(self, name: str, color: str) -> None:
-        plt.scatter(self.dict[name]["relative firing time"], self.dict[name]["IF"], c=color)
+    def plot_spike(self, name: str, spike_name: str, color: str) -> None:
+        plt.scatter(self.dict[name][spike_name]["relative firing time"],
+                    self.dict[name][spike_name]["IF"], c=color)
         plt.title(name)
         plt.xlabel("relative firing time")
         plt.ylabel("IF")
