@@ -22,4 +22,4 @@ class Downloader:
             if not os.path.isfile(file):
                 r = requests.get(gdrive_link + gdrive_id, allow_redirects=True)
                 open(file, "wb").write(r.content)
-            self.data = pd.read_excel(file, header=[0, 1])
+        self.data = pd.read_excel(file, header=[0, 1])
