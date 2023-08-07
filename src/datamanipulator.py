@@ -6,6 +6,7 @@ class DataManipulator:
     def __init__(self, data):
         self.data = data
         self.dict = self.create_dict(all_in_one=False)
+        self.names = [x[0] for x in self.data.columns][::2]
 
     def create_dict(self, all_in_one: bool) -> dict:
         if all_in_one:
