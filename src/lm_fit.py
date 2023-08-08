@@ -67,8 +67,7 @@ class LMFit:
 
             if func == 1:
                 self.func_1[cell_name] = {}
-                self.func_1[cell_name][string] = {}
-                self.func_1[cell_name][string].append(function(params=result.params, x=x))
+                self.func_1[cell_name][string] = function(params=result.params, x=x)
             elif func == 2:
                 self.func_2[cell_name] = {}
                 self.func_2[cell_name][string] = {}
