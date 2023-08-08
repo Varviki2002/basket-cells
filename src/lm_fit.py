@@ -66,12 +66,15 @@ class LMFit:
                              x=np.linspace(np.min(x), np.max(x), 201))
 
             if func == 1:
+                self.func_1[cell_name] = {}
                 self.func_1[cell_name][string] = {}
                 self.func_1[cell_name][string].append(function(params=result.params, x=x))
             elif func == 2:
+                self.func_2[cell_name] = {}
                 self.func_2[cell_name][string] = {}
                 self.func_2[cell_name][string].append(function(params=result.params, x=x))
             elif func == 3:
+                self.func_3[cell_name] = {}
                 self.func_3[cell_name][string] = {}
                 self.func_3[cell_name][string].append(function(params=result.params, x=x))
             elif func is None:
