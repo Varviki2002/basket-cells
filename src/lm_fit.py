@@ -67,15 +67,25 @@ class LMFit:
 
             if func == 1:
                 self.func_1[cell_name] = {}
-                self.func_1[cell_name][string] = function(params=result.params, x=x)
+                if string in self.func_1[cell_name]:
+                    self.func_1[cell_name][string] = function(params=result.params, x=x)
+                else:
+                    self.func_1[cell_name][string] = None
+                    self.func_1[cell_name][string] = function(params=result.params, x=x)
             elif func == 2:
                 self.func_2[cell_name] = {}
-                self.func_2[cell_name][string] = {}
-                self.func_2[cell_name][string].append(function(params=result.params, x=x))
+                if string in self.func_1[cell_name]:
+                    self.func_2[cell_name][string] = function(params=result.params, x=x)
+                else:
+                    self.func_2[cell_name][string] = None
+                    self.func_2[cell_name][string] = function(params=result.params, x=x)
             elif func == 3:
                 self.func_3[cell_name] = {}
-                self.func_3[cell_name][string] = {}
-                self.func_3[cell_name][string].append(function(params=result.params, x=x))
+                if string in self.func_1[cell_name]:
+                    self.func_3[cell_name][string] = function(params=result.params, x=x)
+                else:
+                    self.func_3[cell_name][string] = None
+                    self.func_3[cell_name][string] = function(params=result.params, x=x)
             elif func is None:
                 pass
 
