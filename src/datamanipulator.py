@@ -54,11 +54,11 @@ class DataManipulator:
     def create_frame(self, cell_name: str, spike: str, y: bool, all: bool):
         if all:
             if not y:
-                df = pd.DataFrame.from_dict(self.create_dict(all_in_one=True))
+                df = pd.DataFrame.from_dict(self.create_dict(all_in_one=True)[spike])
                 df.sort_values(by="relative firing time", ascending=False, inplace=True)
                 return df
             else:
-                df = pd.DataFrame.from_dict(self.create_dict(all_in_one=True))
+                df = pd.DataFrame.from_dict(self.create_dict(all_in_one=True)[spike])
                 df.sort_values(by="IF", ascending=False, inplace=True)
                 return df
         else:
