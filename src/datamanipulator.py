@@ -58,7 +58,7 @@ class DataManipulator:
             return df
         else:
             df = pd.DataFrame.from_dict(self.dict[cell_name][spike])
-            df.sort_values(by="relative firing time", ascending=False, inplace=True)
+            df.sort_values(by="IF", ascending=False, inplace=True)
             return df
 
     def measurements(self):
