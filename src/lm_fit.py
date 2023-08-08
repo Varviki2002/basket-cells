@@ -18,6 +18,7 @@ class LMFit:
         self.dict = data_class.dict
         self.names = data_class.names
         self.letter = ["a", "b", "c", "d"]
+        self.fit_1
 
     def create_lmfit_curve_fit(self, num_params: int, cell_name: str, name: str, function, all: bool):
         df_n = pd.DataFrame(index=self.letter[:num_params], columns=["1", "2", "3", "4", "5"]).fillna(0)
@@ -61,6 +62,7 @@ class LMFit:
             # final = data + result.residual
             final = function(params=result.params,
                              x=np.linspace(np.min(x), np.max(x), 201))
+            print(final)
 
             # report_fit(result)
             if num_params == 1:
