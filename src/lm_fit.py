@@ -71,6 +71,8 @@ class LMFit:
                 self.func_2[cell_name][spike] = function(params=result.params, x=x)
             elif func == 3:
                 self.func_3[cell_name][spike] = function(params=result.params, x=x)
+            elif func is None:
+                pass
 
             # report_fit(result)
             if num_params == 1:
