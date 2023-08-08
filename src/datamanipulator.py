@@ -12,22 +12,21 @@ class DataManipulator:
         if all_in_one:
             spike = 1
             gbz_dict = {}
-            for name in [x[0] for x in self.data.columns][::2]:
-                gbz_dict[name] = {}
+            for name in self.names:
                 for idx in range(0, len(self.data[name]["IF"])):
                     if math.isnan(self.data[name]["IF"][idx]) is True:
                         spike = 1
                     else:
                         writing = f"{spike}.spike"
-                        if writing in gbz_dict[name]:
-                            gbz_dict[name][writing]["relative firing time"].append(
+                        if writing in gbz_dict:
+                            gbz_dict[writing]["relative firing time"].append(
                                 self.data[name]["relative firing time"][idx])
-                            gbz_dict[name][writing]["IF"].append(self.data[name]["IF"][idx])
+                            gbz_dict[writing]["IF"].append(self.data[name]["IF"][idx])
                         else:
-                            gbz_dict[name][writing] = {"relative firing time": [], "IF": []}
-                            gbz_dict[name][writing]["relative firing time"].append(
+                            gbz_dict[writing] = {"relative firing time": [], "IF": []}
+                            gbz_dict[writing]["relative firing time"].append(
                                 self.data[name]["relative firing time"][idx])
-                            gbz_dict[name][writing]["IF"].append(self.data[name]["IF"][idx])
+                            gbz_dict[writing]["IF"].append(self.data[name]["IF"][idx])
                         spike += 1
             return gbz_dict
         else:
