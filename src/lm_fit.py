@@ -19,13 +19,16 @@ class LMFit:
         self.names = data_class.names
         self.letter = ["a", "b", "c", "d"]
 
-    def create_lmfit_curve_fit(self, num_params: int, cell_name: str, name: str, function):
+    def create_lmfit_curve_fit(self, num_params: int, cell_name: str, name: str, function, all: bool):
         df_n = pd.DataFrame(index=self.letter[:num_params], columns=["1", "2", "3", "4", "5"]).fillna(0)
         colors = ["r", "b", "g", "mediumpurple", "gold"]
         function_colors = ["maroon", "midnightblue", "darkgreen", "darkmagenta", "darkorange"]
         for spike in range(5):
             string = f"{spike + 1}.spike"
-            df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False)
+            if all:
+                df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, all=all)
+            else:
+                df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, all=all)
             x = np.array(df["relative firing time"])
             data = np.array(df["IF"])
 
