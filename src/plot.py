@@ -5,12 +5,12 @@ import matplotlib.pyplot as plt
 from src.datamanipulator import DataManipulator
 
 
-class Plotter(DataManipulator):
-    def __init__(self, data):
-        super().__init__(data=data)
-        self.data = data
-        self.dict = self.create_dict(all_in_one=False)
-        self.names = [x[0] for x in self.data.columns][::2]
+class Plotter:
+    def __init__(self, data_class: DataManipulator):
+        self.data_class = data_class
+        self.data = data_class.data
+        self.dict = data_class.dict
+        self.names = data_class.names
 
     def plot_spike(self, name: str, spike_name: str, color: str) -> None:
         plt.scatter(self.dict[name][spike_name]["relative firing time"],
