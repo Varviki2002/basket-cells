@@ -18,8 +18,11 @@ class LMFit:
         self.dict = data_class.dict
         self.names = data_class.names
         self.letter = ["a", "b", "c", "d"]
+        self.func_1 = dict()
+        self.func_2 = dict()
+        self.func_3 = dict()
 
-    def create_lmfit_curve_fit(self, num_params: int, cell_name: str, name: str, function, all: bool):
+    def create_lmfit_curve_fit(self, num_params: int, cell_name: str, name: str, function, all: bool, func: int):
         df_n = pd.DataFrame(index=self.letter[:num_params], columns=["1", "2", "3", "4", "5"]).fillna(0)
         colors = ["r", "b", "g", "mediumpurple", "gold"]
         function_colors = ["maroon", "midnightblue", "darkgreen", "darkmagenta", "darkorange"]
@@ -61,7 +64,13 @@ class LMFit:
             # final = data + result.residual
             final = function(params=result.params,
                              x=np.linspace(np.min(x), np.max(x), 201))
-            print(final)
+
+            if func == 1:
+                self.func_1[cell_name][spike] = function(params=result.params, x=x)
+            elif func == 2:
+                self.func_2[cell_name][spike] = function(params=result.params, x=x)
+            elif func == 3:
+                self.func_3[cell_name][spike] = function(params=result.params, x=x)
 
             # report_fit(result)
             if num_params == 1:
