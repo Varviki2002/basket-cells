@@ -1,10 +1,5 @@
-import os
-import random
-import requests
-
-from lmfit import minimize, Minimizer, Parameters, Parameter, report_fit
+from lmfit import Minimizer, Parameters
 import numpy as np
-import math
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -78,7 +73,7 @@ class LMFit:
             elif func == 2:
                 if spike == 0:
                     self.func_2[cell_name] = {}
-                if string in self.func_1[cell_name]:
+                if string in self.func_2[cell_name]:
                     self.func_2[cell_name][string] = function(params=result.params, x=x)
                 else:
                     self.func_2[cell_name][string] = None
