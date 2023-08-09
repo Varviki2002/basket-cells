@@ -30,3 +30,8 @@ class Evaluate:
         plt.plot(abs_3, 'o', c='b')
         plt.plot(abs_4, 'o', c='darkmagenta')
 
+        print(f"The 1st fit sum: {np.sum(abs_1)}")
+        print(f"The 1st fit sum: {np.sum(abs_2)}")
+        print(f"The 1st fit sum: {np.sum(abs_3)}")
+        print(f"The 1st fit sum: {np.sum(abs_4)}")
+
