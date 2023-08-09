@@ -149,17 +149,21 @@ class LMFit:
                     self.func_4[cell_name] = {}
                 if string in self.func_4[cell_name]:
                     self.func_4[cell_name][string] = function(params=result.params, x=x)
+                    self.func_4[cell_name][string] = self.func_4[cell_name][string].values
                 else:
                     self.func_4[cell_name][string] = None
                     self.func_4[cell_name][string] = function(params=result.params, x=x)
+                    self.func_4[cell_name][string] = self.func_4[cell_name][string].values
             elif func == 3:
                 if spike == 0:
                     self.func_3[cell_name] = {}
                 if string in self.func_3[cell_name]:
                     self.func_3[cell_name][string] = function(params=result.params, x=x)
+                    self.func_3[cell_name][string] = self.func_3[cell_name][string].values
                 else:
                     self.func_3[cell_name][string] = None
                     self.func_3[cell_name][string] = function(params=result.params, x=x)
+                    self.func_3[cell_name][string] = self.func_3[cell_name][string].values
             elif func is None:
                 pass
 
