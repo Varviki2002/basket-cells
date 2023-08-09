@@ -111,7 +111,7 @@ class LMFit:
 
     def curve_fit_linear(self, num_params: int, cell_name: str, name: str, function,
                          all: bool, func: int,show: bool):
-        df_n = pd.DataFrame(index=self.letter[:num_params], columns=["1", "2", "3", "4", "5"]).fillna(0)
+        df_n = pd.DataFrame(index=["a", "b"], columns=["1", "2", "3", "4", "5"]).fillna(0)
         colors = ["r", "b", "g", "mediumpurple", "gold"]
         function_colors = ["maroon", "midnightblue", "darkgreen", "darkmagenta", "darkorange"]
         for spike in range(5):
@@ -129,11 +129,8 @@ class LMFit:
 
             # create a set of Parameters
             params = Parameters()
-            if num_params == 1:
-                params.add("a_param", value=2, min=0)
-            elif num_params == 2:
-                params.add("a_param", value=2, min=0)
-                params.add("b_param", value=1, min=0)
+            params.add("a_param", value=2)
+            params.add("b_param", value=1)
 
             # do fit, here with least_squares model
             minner = Minimizer(func_min, params, fcn_args=(x, data))
@@ -141,8 +138,7 @@ class LMFit:
 
             # calculate final result
             # final = data + result.residual
-            final = function(params=result.params,
-                             x=np.linspace(np.min(x), np.max(x), 201))
+            final = function(params=result.params, x=np.linspace(np.min(x), np.max(x), 201))
 
             if func == 4:
                 if spike == 0:
@@ -186,9 +182,7 @@ class LMFit:
                          10 ** final,
                          'r', c=function_colors[spike])
                 plt.title(name)
-
-            else:
-                pass
         if show:
             return df_n
+
 
