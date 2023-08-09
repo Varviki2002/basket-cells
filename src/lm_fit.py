@@ -10,7 +10,7 @@ class LMFit:
     def __init__(self, data_class: DataManipulator):
         self.data_class = data_class
         self.data = data_class.data
-        self.dict = data_class.dict
+        self.data_dict = data_class.dict
         self.names = data_class.names
         self.letter = ["a", "b", "c", "d"]
         self.func_1 = dict()
