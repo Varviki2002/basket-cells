@@ -15,10 +15,10 @@ class Evaluate:
 
     def absolute_difference(self, cell_name: str, spike: str):
         string = f"{spike}.spike"
-        abs_1 = np.abs(np.array(self.data_dict[cell_name][string]) - np.array(self.func_1[cell_name][string]))
-        abs_2 = np.abs(np.array(self.data_dict[cell_name][string]) - np.array(self.func_2[cell_name][string]))
-        abs_3 = np.abs(np.array(self.data_dict[cell_name][string]) - np.array(self.func_3[cell_name][string]))
-        abs_4 = np.abs(np.array(self.data_dict[cell_name][string]) - np.array(self.func_4[cell_name][string]))
+        abs_1 = np.abs(self.data_dict[cell_name][string]["IF"] - self.func_1[cell_name][string])
+        abs_2 = np.abs(self.data_dict[cell_name][string]["IF"] - self.func_2[cell_name][string])
+        abs_3 = np.abs(self.data_dict[cell_name][string]["IF"] - self.func_3[cell_name][string])
+        abs_4 = np.abs(self.data_dict[cell_name][string]["IF"] - self.func_4[cell_name][string])
 
         print(f"The 1st fit difference: {abs_1}")
         print(f"The 2nd fit difference: {abs_2}")
