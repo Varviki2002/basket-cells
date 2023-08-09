@@ -25,8 +25,8 @@ class Evaluate:
         print(f"The 3rd fit difference: {abs_3}")
         print(f"The 4th fit difference: {abs_4}")
 
-        plt.plot(np.linspace(1, len(abs_1) + 1, 1), abs_1, 'r')
-        plt.plot(np.linspace(1, len(abs_2) + 1, 1), abs_2, 'g')
-        plt.plot(np.linspace(1, len(abs_3) + 1, 1), abs_3, 'b')
-        plt.plot(np.linspace(1, len(abs_4) + 1, 1), abs_4, 'darkmagenta')
+        plt.plot(abs_1, 'o', c='r')
+        plt.plot(abs_2, 'o', c='g')
+        plt.plot(abs_3, 'o', c='b')
+        plt.plot(abs_4, 'o', c='darkmagenta')
 
