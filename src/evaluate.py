@@ -53,7 +53,7 @@ class Evaluate:
         smallest = []
 
         for i in range(len(abs_1)):
-            minimum = np.min(abs_1[i], abs_2[i], abs_3[i], abs_4[i])
+            minimum = np.min(np.array(abs_1[i], abs_2[i], abs_3[i], abs_4[i]))
             if minimum == abs_1[i]:
                 smallest.append("func_1")
             elif minimum == abs_2[i]:
