@@ -71,24 +71,44 @@ class LMFit:
             final = function(params=result.params,
                              x=np.linspace(np.min(x), np.max(x), 201))
 
-            if func == 1:
-                if spike == 0:
-                    self.func_1[cell_name] = {}
-                if string in self.func_1[cell_name]:
-                    self.func_1[cell_name][string] = function(params=result.params, x=x)
-                else:
-                    self.func_1[cell_name][string] = None
-                    self.func_1[cell_name][string] = function(params=result.params, x=x)
-            elif func == 2:
-                if spike == 0:
-                    self.func_2[cell_name] = {}
-                if string in self.func_2[cell_name]:
-                    self.func_2[cell_name][string] = function(params=result.params, x=x)
-                else:
-                    self.func_2[cell_name][string] = None
-                    self.func_2[cell_name][string] = function(params=result.params, x=x)
-            elif func is None:
-                pass
+            if y:
+                if func == 5:
+                    if spike == 0:
+                        self.func_5[cell_name] = {}
+                    if string in self.func_5[cell_name]:
+                        self.func_5[cell_name][string] = function(params=result.params, x=x)
+                    else:
+                        self.func_5[cell_name][string] = None
+                        self.func_5[cell_name][string] = function(params=result.params, x=x)
+                elif func == 6:
+                    if spike == 0:
+                        self.func_6[cell_name] = {}
+                    if string in self.func_6[cell_name]:
+                        self.func_6[cell_name][string] = function(params=result.params, x=x)
+                    else:
+                        self.func_6[cell_name][string] = None
+                        self.func_6[cell_name][string] = function(params=result.params, x=x)
+                elif func is None:
+                    pass
+            else:
+                if func == 1:
+                    if spike == 0:
+                        self.func_1[cell_name] = {}
+                    if string in self.func_1[cell_name]:
+                        self.func_1[cell_name][string] = function(params=result.params, x=x)
+                    else:
+                        self.func_1[cell_name][string] = None
+                        self.func_1[cell_name][string] = function(params=result.params, x=x)
+                elif func == 2:
+                    if spike == 0:
+                        self.func_2[cell_name] = {}
+                    if string in self.func_2[cell_name]:
+                        self.func_2[cell_name][string] = function(params=result.params, x=x)
+                    else:
+                        self.func_2[cell_name][string] = None
+                        self.func_2[cell_name][string] = function(params=result.params, x=x)
+                elif func is None:
+                    pass
 
             if show:
                 # report_fit(result)
@@ -154,28 +174,48 @@ class LMFit:
             # final = data + result.residual
             final = function(params=result.params, x=np.linspace(np.min(x), np.max(x), 201))
 
-            if func == 4:
-                if spike == 0:
-                    self.func_4[cell_name] = {}
-                if string in self.func_4[cell_name]:
-                    self.func_4[cell_name][string] = function(params=result.params, x=x)
-                    self.func_4[cell_name][string] = 10 ** self.func_4[cell_name][string].values
-                else:
-                    self.func_4[cell_name][string] = None
-                    self.func_4[cell_name][string] = function(params=result.params, x=x)
-                    self.func_4[cell_name][string] = 10 ** self.func_4[cell_name][string].values
-            elif func == 3:
-                if spike == 0:
-                    self.func_3[cell_name] = {}
-                if string in self.func_3[cell_name]:
-                    self.func_3[cell_name][string] = function(params=result.params, x=x)
-                    self.func_3[cell_name][string] = 10 ** self.func_3[cell_name][string].values
-                else:
-                    self.func_3[cell_name][string] = None
-                    self.func_3[cell_name][string] = function(params=result.params, x=x)
-                    self.func_3[cell_name][string] = 10 ** self.func_3[cell_name][string].values
-            elif func is None:
-                pass
+            if y:
+                if func == 7:
+                    if spike == 0:
+                        self.func_7[cell_name] = {}
+                    if string in self.func_7[cell_name]:
+                        self.func_7[cell_name][string] = function(params=result.params, x=x)
+                    else:
+                        self.func_7[cell_name][string] = None
+                        self.func_7[cell_name][string] = function(params=result.params, x=x)
+                elif func == 8:
+                    if spike == 0:
+                        self.func_8[cell_name] = {}
+                    if string in self.func_8[cell_name]:
+                        self.func_8[cell_name][string] = function(params=result.params, x=x)
+                    else:
+                        self.func_8[cell_name][string] = None
+                        self.func_8[cell_name][string] = function(params=result.params, x=x)
+                elif func is None:
+                    pass
+            else:
+                if func == 4:
+                    if spike == 0:
+                        self.func_4[cell_name] = {}
+                    if string in self.func_4[cell_name]:
+                        self.func_4[cell_name][string] = function(params=result.params, x=x)
+                        self.func_4[cell_name][string] = 10 ** self.func_4[cell_name][string].values
+                    else:
+                        self.func_4[cell_name][string] = None
+                        self.func_4[cell_name][string] = function(params=result.params, x=x)
+                        self.func_4[cell_name][string] = 10 ** self.func_4[cell_name][string].values
+                elif func == 3:
+                    if spike == 0:
+                        self.func_3[cell_name] = {}
+                    if string in self.func_3[cell_name]:
+                        self.func_3[cell_name][string] = function(params=result.params, x=x)
+                        self.func_3[cell_name][string] = 10 ** self.func_3[cell_name][string].values
+                    else:
+                        self.func_3[cell_name][string] = None
+                        self.func_3[cell_name][string] = function(params=result.params, x=x)
+                        self.func_3[cell_name][string] = 10 ** self.func_3[cell_name][string].values
+                elif func is None:
+                    pass
 
             if show:
 

@@ -6,32 +6,55 @@ from src.datamanipulator import DataManipulator
 
 
 class Evaluate:
-    def __init__(self, data_class: DataManipulator, data_dict, func_1, func_2, func_3, func_4):
+    def __init__(self, data_class: DataManipulator, data_dict, func_1, func_2, func_3, func_4, func_5, func_6, func_7,
+                 func_8):
         self.data_class = data_class
         self.data_dict = data_dict
         self.func_1 = func_1
         self.func_2 = func_2
         self.func_3 = func_3
         self.func_4 = func_4
+        self.func_5 = func_5
+        self.func_6 = func_6
+        self.func_7 = func_7
+        self.func_8 = func_8
 
-    def absolute_difference(self, cell_name: str, spike: str) -> list:
+    def absolute_difference(self, cell_name: str, spike: str, y: bool) -> list:
         string = f"{spike}.spike"
-        abs_1 = np.abs(self.data_class.create_frame(cell_name=cell_name,
-                                                    spike=string,
-                                                    y=False,
-                                                    all=False)["IF"] - self.func_1[cell_name][string])
-        abs_2 = np.abs(self.data_class.create_frame(cell_name=cell_name,
-                                                    spike=string,
-                                                    y=False,
-                                                    all=False)["IF"] - self.func_2[cell_name][string])
-        abs_3 = np.abs(self.data_class.create_frame(cell_name=cell_name,
-                                                    spike=string,
-                                                    y=False,
-                                                    all=False)["IF"] - self.func_3[cell_name][string])
-        abs_4 = np.abs(self.data_class.create_frame(cell_name=cell_name,
-                                                    spike=string,
-                                                    y=False,
-                                                    all=False)["IF"] - self.func_4[cell_name][string])
+        if y:
+            abs_1 = np.abs(self.data_class.create_frame(cell_name=cell_name,
+                                                        spike=string,
+                                                        y=True,
+                                                        all=False)["relative firing time"] - self.func_5[cell_name][string])
+            abs_2 = np.abs(self.data_class.create_frame(cell_name=cell_name,
+                                                        spike=string,
+                                                        y=True,
+                                                        all=False)["relative firing time"] - self.func_6[cell_name][string])
+            abs_3 = np.abs(self.data_class.create_frame(cell_name=cell_name,
+                                                        spike=string,
+                                                        y=True,
+                                                        all=False)["relative firing time"] - self.func_7[cell_name][string])
+            abs_4 = np.abs(self.data_class.create_frame(cell_name=cell_name,
+                                                        spike=string,
+                                                        y=True,
+                                                        all=False)["relative firing time"] - self.func_8[cell_name][string])
+        else:
+            abs_1 = np.abs(self.data_class.create_frame(cell_name=cell_name,
+                                                        spike=string,
+                                                        y=False,
+                                                        all=False)["IF"] - self.func_1[cell_name][string])
+            abs_2 = np.abs(self.data_class.create_frame(cell_name=cell_name,
+                                                        spike=string,
+                                                        y=False,
+                                                        all=False)["IF"] - self.func_2[cell_name][string])
+            abs_3 = np.abs(self.data_class.create_frame(cell_name=cell_name,
+                                                        spike=string,
+                                                        y=False,
+                                                        all=False)["IF"] - self.func_3[cell_name][string])
+            abs_4 = np.abs(self.data_class.create_frame(cell_name=cell_name,
+                                                        spike=string,
+                                                        y=False,
+                                                        all=False)["IF"] - self.func_4[cell_name][string])
 
         print(f"The 1st fit difference: {abs_1}")
         print(f"The 2nd fit difference: {abs_2}")
