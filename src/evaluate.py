@@ -6,7 +6,7 @@ from src.datamanipulator import DataManipulator
 
 
 class Evaluate:
-    def __init__(self, data_class: DataManipulator,data_dict, func_1, func_2, func_3, func_4):
+    def __init__(self, data_class: DataManipulator, data_dict, func_1, func_2, func_3, func_4):
         self.data_class = data_class
         self.data_dict = data_dict
         self.func_1 = func_1
@@ -50,3 +50,17 @@ class Evaluate:
         print(f"The 1st fit sum: {np.sum(abs_3)}")
         print(f"The 1st fit sum: {np.sum(abs_4)}")
 
+        smallest = []
+
+        for i in range(len(abs_1)):
+            minimum = np.min(abs_1[i], abs_2[i], abs_3[i], abs_4[i])
+            if minimum == abs_1[i]:
+                smallest.append("func_1")
+            elif minimum == abs_2[i]:
+                smallest.append("func_2")
+            elif minimum == abs_3[i]:
+                smallest.append("func_3")
+            else:
+                smallest.append("func_4")
+
+        return smallest
