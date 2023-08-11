@@ -140,7 +140,7 @@ class LMFit:
 
     def curve_fit_linear(self, num_params: int, cell_name: str, name: str, function,
                          all: bool, func: int,show: bool, y: bool):
-        df_n = pd.DataFrame(index=["a", "b"], columns=["1", "2", "3", "4", "5"]).fillna(0)
+        df_n = pd.DataFrame(index=self.letter[:num_params], columns=["1", "2", "3", "4", "5"]).fillna(0)
         colors = ["r", "b", "g", "mediumpurple", "gold"]
         function_colors = ["maroon", "midnightblue", "darkgreen", "darkmagenta", "darkorange"]
         for spike in range(5):
