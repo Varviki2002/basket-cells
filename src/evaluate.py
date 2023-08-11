@@ -44,6 +44,7 @@ class Evaluate:
         plt.plot(abs_4, 'o', c='darkmagenta')
         plt.legend()
         plt.title("Absolute difference for each point")
+        plt.show()
 
         print(f"The 1st fit sum: {np.sum(abs_1)}")
         print(f"The 1st fit sum: {np.sum(abs_2)}")
