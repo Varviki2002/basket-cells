@@ -19,7 +19,7 @@ class LMFit:
         self.func_4 = dict()
 
     def create_lmfit_curve_fit(self, num_params: int, cell_name: str, name: str, function,
-                               all: bool, func: int,show: bool):
+                               all: bool, func: int,show: bool, y: bool):
         df_n = pd.DataFrame(index=self.letter[:num_params], columns=["1", "2", "3", "4", "5"]).fillna(0)
         colors = ["r", "b", "g", "mediumpurple", "gold"]
         function_colors = ["maroon", "midnightblue", "darkgreen", "darkmagenta", "darkorange"]
@@ -29,8 +29,13 @@ class LMFit:
                 df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, all=all)
             else:
                 df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, all=all)
-            x = np.array(df["relative firing time"])
-            data = np.array(df["IF"])
+
+            if y:
+                data = np.array(df["relative firing time"])
+                x = np.array(df["IF"])
+            else:
+                x = np.array(df["relative firing time"])
+                data = np.array(df["IF"])
 
             def func_min(params, x, data):
                 model = function(params=params, x=x)
@@ -110,7 +115,7 @@ class LMFit:
             return df_n
 
     def curve_fit_linear(self, num_params: int, cell_name: str, name: str, function,
-                         all: bool, func: int,show: bool):
+                         all: bool, func: int,show: bool, y: bool):
         df_n = pd.DataFrame(index=["a", "b"], columns=["1", "2", "3", "4", "5"]).fillna(0)
         colors = ["r", "b", "g", "mediumpurple", "gold"]
         function_colors = ["maroon", "midnightblue", "darkgreen", "darkmagenta", "darkorange"]
@@ -120,8 +125,13 @@ class LMFit:
                 df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, all=all)
             else:
                 df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, all=all)
-            x = np.log10(df["relative firing time"])
-            data = np.log10(df["IF"])
+
+            if y:
+                data = np.log10(df["relative firing time"])
+                x = np.log10(df["IF"])
+            else:
+                x = np.log10(df["relative firing time"])
+                data = np.log10(df["IF"])
 
             def func_min(params, x, data):
                 model = function(params=params, x=x)
