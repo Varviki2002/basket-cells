@@ -14,7 +14,7 @@ class Evaluate:
         self.func_3 = func_3
         self.func_4 = func_4
 
-    def absolute_difference(self, cell_name: str, spike: str):
+    def absolute_difference(self, cell_name: str, spike: str) -> list:
         string = f"{spike}.spike"
         abs_1 = np.abs(self.data_class.create_frame(cell_name=cell_name,
                                                     spike=string,
