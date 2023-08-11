@@ -17,19 +17,19 @@ class Evaluate:
     def absolute_difference(self, cell_name: str, spike: str):
         string = f"{spike}.spike"
         abs_1 = np.abs(self.data_class.create_frame(cell_name=cell_name,
-                                                    spike=spike,
+                                                    spike=string,
                                                     y=False,
                                                     all=False)["IF"] - self.func_1[cell_name][string])
         abs_2 = np.abs(self.data_class.create_frame(cell_name=cell_name,
-                                                    spike=spike,
+                                                    spike=string,
                                                     y=False,
                                                     all=False)["IF"] - self.func_2[cell_name][string])
         abs_3 = np.abs(self.data_class.create_frame(cell_name=cell_name,
-                                                    spike=spike,
+                                                    spike=string,
                                                     y=False,
                                                     all=False)["IF"] - self.func_3[cell_name][string])
         abs_4 = np.abs(self.data_class.create_frame(cell_name=cell_name,
-                                                    spike=spike,
+                                                    spike=string,
                                                     y=False,
                                                     all=False)["IF"] - self.func_4[cell_name][string])
 
