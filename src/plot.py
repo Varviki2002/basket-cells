@@ -20,7 +20,10 @@ class Plotter:
         else:
             plt.scatter(self.dict[name][spike_name]["relative firing time"],
                         self.dict[name][spike_name]["IF"], c=color)
-        plt.title(name)
+        if all:
+            plt.title("All spikes")
+        else:
+            plt.title(name)
         plt.xlabel("relative firing time")
         plt.ylabel("IF")
         plt.show()
