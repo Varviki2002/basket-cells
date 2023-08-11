@@ -151,11 +151,11 @@ class LMFit:
                 df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, all=all)
 
             if y:
-                data = np.log10(np.array(df["relative firing time"]))
-                x = np.log10(np.array(df["IF"]))
+                data = np.log10(df["relative firing time"])
+                x = np.log10(df["IF"])
             else:
-                x = np.log10(np.array(df["relative firing time"]))
-                data = np.log10(np.array(df["IF"]))
+                x = np.log10(df["relative firing time"])
+                data = np.log10(df["IF"])
 
             def func_min(params, x, data):
                 model = function(params=params, x=x)
