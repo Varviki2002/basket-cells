@@ -17,6 +17,10 @@ class LMFit:
         self.func_2 = dict()
         self.func_3 = dict()
         self.func_4 = dict()
+        self.func_5 = dict()
+        self.func_6 = dict()
+        self.func_7 = dict()
+        self.func_8 = dict()
 
     def create_lmfit_curve_fit(self, num_params: int, cell_name: str, name: str, function,
                                all: bool, func: int,show: bool, y: bool):
