@@ -3,12 +3,23 @@ import pandas as pd
 
 
 class DataManipulator:
+    """
+    A class to manage data manipulations.
+    """
     def __init__(self, data):
+        """
+        :param data: The original dataframe.
+        """
         self.data = data
         self.dict = self.create_dict(all_in_one=False)
         self.names = [x[0] for x in self.data.columns][::2]
 
     def create_dict(self, all_in_one: bool) -> dict:
+        """
+        This method creates a dictionary from the data.
+        :param bool all_in_one: if true there won't be cell names in the dictionary, just the spikes from every cells
+        :return dict: the created nested dictionary
+        """
         if all_in_one:
             spike = 1
             gbz_dict = {}
@@ -51,7 +62,15 @@ class DataManipulator:
                         spike += 1
             return gbz_dict
 
-    def create_frame(self, cell_name: str, spike: str, y: bool, all: bool):
+    def create_frame(self, cell_name: str, spike: str, y: bool, all: bool) -> pd.DataFrame:
+        """
+        This method creates a Dataframe from a cell's spike's relative firing time and IF.
+        :param str cell_name: the name of the brain cell
+        :param str spike: the number of the spike, for example "1.spike"
+        :param bool y: if true the axes will be reversed
+        :param bool all: if true the common dict from all cells will be used.
+        :return pd.DataFrame: the created dataframe
+        """
         if all:
             if not y:
                 df = pd.DataFrame.from_dict(self.create_dict(all_in_one=True)[spike])
@@ -71,7 +90,11 @@ class DataManipulator:
                 df.sort_values(by="IF", ascending=False, inplace=True)
                 return df
 
-    def measurements(self):
+    def measurements(self) -> pd.DataFrame:
+        """
+        Creates the measurement dataframe, that counts the number of the measurements in every spike of a cell.
+        :return pd.DataFrame: the dataframe
+        """
         measure_dict = {}
         for name in [x[0] for x in self.data.columns][::2]:
             measure_dict[name] = {}
@@ -131,7 +154,11 @@ class DataManipulator:
 
         return pd.DataFrame(n_dict).transpose().fillna(0)
 
-    def create_spike_frame(self):
+    def create_spike_frame(self) -> pd.DataFrame:
+        """
+        Creates a dataframe from the cell dictionary.
+        :return pd.DataFrame: the created dataframe
+        """
         n_dict = {}
         for name in [x[0] for x in self.data.columns][::2]:
             n_dict[name] = {}

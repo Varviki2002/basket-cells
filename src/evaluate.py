@@ -6,8 +6,23 @@ from src.datamanipulator import DataManipulator
 
 
 class Evaluate:
+    """
+    This class makes the evaluation.
+    """
     def __init__(self, data_class: DataManipulator, data_dict, func_1, func_2, func_3, func_4, func_5, func_6, func_7,
-                 func_8):
+                 func_8) -> list:
+        """
+        :param data_class: the DataManipulator class
+        :param data_dict: the dict that includes the cells
+        :param dict func_1:
+        :param func_2:
+        :param func_3:
+        :param func_4:
+        :param func_5:
+        :param func_6:
+        :param func_7:
+        :param func_8:
+        """
         self.data_class = data_class
         self.data_dict = data_dict
         self.func_1 = func_1

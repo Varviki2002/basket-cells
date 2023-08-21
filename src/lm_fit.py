@@ -23,7 +23,19 @@ class LMFit:
         self.func_8 = dict()
 
     def create_lmfit_curve_fit(self, num_params: int, cell_name: str, name: str, function,
-                               all: bool, func: int,show: bool, y: bool):
+                               all: bool, func: int, show: bool, y: bool) -> pd.DataFrame:
+        """
+        This method makes the curve fitting to the points of the given spike's cells.
+        :param int num_params: the number of the parameters
+        :param str cell_name: the name of the cell
+        :param str name: the name of the plot
+        :param function: the function that includes the equation of the curve to be fitted
+        :param bool all: if true the common dictionary of the cells will be used
+        :param int func: the number of the dictionary, where the fitted data will be saved
+        :param bool show: if true the curve fitting will be plotted
+        :param bool y: if true the axes will be inverted
+        :return -> pd.DataFrames: the parameters and their values will be shown
+        """
         df_n = pd.DataFrame(index=self.letter[:num_params], columns=["1", "2", "3", "4", "5"]).fillna(0)
         colors = ["r", "b", "g", "mediumpurple", "gold"]
         function_colors = ["maroon", "midnightblue", "darkgreen", "darkmagenta", "darkorange"]
@@ -139,7 +151,20 @@ class LMFit:
             return df_n
 
     def curve_fit_linear(self, num_params: int, cell_name: str, name: str, function,
-                         all: bool, func: int,show: bool, y: bool):
+                         all: bool, func: int, show: bool, y: bool) -> pd.DataFrame:
+        """
+        This method makes the curve fitting to the points of the given spike's cells
+        in double logarithmic coordinate system.
+        :param int num_params: the number of the parameters
+        :param str cell_name: the name of the cell
+        :param str name: the name of the plot
+        :param function: the function that includes the equation of the curve to be fitted
+        :param bool all: if true the common dictionary of the cells will be used
+        :param int func: the number of the dictionary, where the fitted data will be saved
+        :param bool show: if true the curve fitting will be plotted
+        :param bool y: if true the axes will be inverted
+        :return -> pd.DataFrames: the parameters and their values will be shown
+        """
         df_n = pd.DataFrame(index=self.letter[:num_params], columns=["1", "2", "3", "4", "5"]).fillna(0)
         colors = ["r", "b", "g", "mediumpurple", "gold"]
         function_colors = ["maroon", "midnightblue", "darkgreen", "darkmagenta", "darkorange"]

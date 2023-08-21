@@ -7,7 +7,10 @@ from src import PROJECT_PATH
 
 
 class Downloader:
-    def __init__(self, gdrive_id: str = None, file_name: str = None):
+    """
+    This class downloads the data.
+    """
+    def __init__(self, gdrive_id: str = None, file_name: str = None) -> None:
         """
         Constructor for downloading and loading the data file.
         :param str gdrive_id: Google Drive id
