@@ -11,16 +11,13 @@ class LMFit:
         self.data_class = data_class
         self.data = data_class.data
         self.data_dict = data_class.dict
+        self.all_in_one_dict = data_class.all_in_one_dict
         self.names = data_class.names
         self.letter = ["a", "b", "c", "d"]
-        self.func_1 = dict()
-        self.func_2 = dict()
-        self.func_3 = dict()
-        self.func_4 = dict()
-        self.func_5 = dict()
-        self.func_6 = dict()
-        self.func_7 = dict()
-        self.func_8 = dict()
+        self.func_dict = {}
+        for i in range(8):
+            name = f"func_{i+1}"
+            self.func_dict[name] = dict()
 
     def create_lmfit_curve_fit(self, num_params: int, cell_name: str, name: str, function,
                                all: bool, func: int, show: bool, y: bool) -> pd.DataFrame:

@@ -6,12 +6,16 @@ class DataManipulator:
     """
     A class to manage data manipulations.
     """
+
     def __init__(self, data):
         """
         :param data: The original dataframe.
+        The dictionary look like this:
+        {"the name of the cells":{"the number of the spike":{"relative firingtime:[], "IF":[]}}}
         """
         self.data = data
         self.dict = self.create_dict(all_in_one=False)
+        self.all_in_one_dict = self.create_dict(all_in_one=True)
         self.names = [x[0] for x in self.data.columns][::2]
 
     def create_dict(self, all_in_one: bool) -> dict:
@@ -29,15 +33,10 @@ class DataManipulator:
                         spike = 1
                     else:
                         writing = f"{spike}.spike"
-                        if writing in gbz_dict:
-                            gbz_dict[writing]["relative firing time"].append(
-                                self.data[name]["relative firing time"][idx])
-                            gbz_dict[writing]["IF"].append(self.data[name]["IF"][idx])
-                        else:
+                        if writing not in gbz_dict:
                             gbz_dict[writing] = {"relative firing time": [], "IF": []}
-                            gbz_dict[writing]["relative firing time"].append(
-                                self.data[name]["relative firing time"][idx])
-                            gbz_dict[writing]["IF"].append(self.data[name]["IF"][idx])
+                        gbz_dict[writing]["relative firing time"].append(self.data[name]["relative firing time"][idx])
+                        gbz_dict[writing]["IF"].append(self.data[name]["IF"][idx])
                         spike += 1
             return gbz_dict
         else:
@@ -50,15 +49,11 @@ class DataManipulator:
                         spike = 1
                     else:
                         writing = f"{spike}.spike"
-                        if writing in gbz_dict[name]:
-                            gbz_dict[name][writing]["relative firing time"].append(
-                                self.data[name]["relative firing time"][idx])
-                            gbz_dict[name][writing]["IF"].append(self.data[name]["IF"][idx])
-                        else:
+                        if writing not in gbz_dict[name]:
                             gbz_dict[name][writing] = {"relative firing time": [], "IF": []}
-                            gbz_dict[name][writing]["relative firing time"].append(
-                                self.data[name]["relative firing time"][idx])
-                            gbz_dict[name][writing]["IF"].append(self.data[name]["IF"][idx])
+                        gbz_dict[name][writing]["relative firing time"].append(
+                            self.data[name]["relative firing time"][idx])
+                        gbz_dict[name][writing]["IF"].append(self.data[name]["IF"][idx])
                         spike += 1
             return gbz_dict
 
@@ -105,7 +100,8 @@ class DataManipulator:
                 else:
                     if math.isnan(self.data[name]["relative firing time"][idx + 1]) is True:
                         continue
-                    elif self.data[name]["relative firing time"][idx] < self.data[name]["relative firing time"][idx + 1]:
+                    elif self.data[name]["relative firing time"][idx] < self.data[name]["relative firing time"][
+                        idx + 1]:
                         writing = f"{measure}.measure"
                         if writing in measure_dict[name]:
                             if math.isnan(self.data[name]["IF"][idx]) is False:
@@ -166,4 +162,3 @@ class DataManipulator:
                 writing = f"{spike}.spike"
                 n_dict[name][writing] = len(self.dict[name][writing]["relative firing time"])
         return pd.DataFrame(n_dict).transpose().fillna(0)
-

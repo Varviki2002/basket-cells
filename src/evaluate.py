@@ -3,36 +3,21 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from src.datamanipulator import DataManipulator
+from src.lm_fit import LMFit
 
 
 class Evaluate:
     """
     This class makes the evaluation.
     """
-    def __init__(self, data_class: DataManipulator, data_dict, func_1, func_2, func_3, func_4, func_5, func_6, func_7,
-                 func_8) -> list:
+
+    def __init__(self, data_class: DataManipulator, lm_fit: LMFit) -> None:
         """
         :param data_class: the DataManipulator class
         :param data_dict: the dict that includes the cells
-        :param dict func_1:
-        :param func_2:
-        :param func_3:
-        :param func_4:
-        :param func_5:
-        :param func_6:
-        :param func_7:
-        :param func_8:
         """
         self.data_class = data_class
-        self.data_dict = data_dict
-        self.func_1 = func_1
-        self.func_2 = func_2
-        self.func_3 = func_3
-        self.func_4 = func_4
-        self.func_5 = func_5
-        self.func_6 = func_6
-        self.func_7 = func_7
-        self.func_8 = func_8
+        self.lm_fit = lm_fit
 
     def absolute_difference(self, cell_name: str, spike: str, y: bool) -> list:
         string = f"{spike}.spike"
@@ -40,19 +25,23 @@ class Evaluate:
             abs_1 = np.abs(self.data_class.create_frame(cell_name=cell_name,
                                                         spike=string,
                                                         y=True,
-                                                        all=False)["relative firing time"] - self.func_5[cell_name][string])
+                                                        all=False)["relative firing time"] - self.func_5[cell_name][
+                               string])
             abs_2 = np.abs(self.data_class.create_frame(cell_name=cell_name,
                                                         spike=string,
                                                         y=True,
-                                                        all=False)["relative firing time"] - self.func_6[cell_name][string])
+                                                        all=False)["relative firing time"] - self.func_6[cell_name][
+                               string])
             abs_3 = np.abs(self.data_class.create_frame(cell_name=cell_name,
                                                         spike=string,
                                                         y=True,
-                                                        all=False)["relative firing time"] - self.func_7[cell_name][string])
+                                                        all=False)["relative firing time"] - self.func_7[cell_name][
+                               string])
             abs_4 = np.abs(self.data_class.create_frame(cell_name=cell_name,
                                                         spike=string,
                                                         y=True,
-                                                        all=False)["relative firing time"] - self.func_8[cell_name][string])
+                                                        all=False)["relative firing time"] - self.func_8[cell_name][
+                               string])
         else:
             abs_1 = np.abs(self.data_class.create_frame(cell_name=cell_name,
                                                         spike=string,
