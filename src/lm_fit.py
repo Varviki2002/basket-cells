@@ -20,14 +20,14 @@ class LMFit:
             self.func_dict[name] = dict()
 
     def create_lmfit_curve_fit(self, num_params: int, cell_name: str, name: str, function,
-                               all: bool, func: int, show: bool, y: bool) -> pd.DataFrame:
+                               do_all: bool, func: int, show: bool, y: bool) -> pd.DataFrame:
         """
         This method makes the curve fitting to the points of the given spike's cells.
         :param int num_params: the number of the parameters
         :param str cell_name: the name of the cell
         :param str name: the name of the plot
         :param function: the function that includes the equation of the curve to be fitted
-        :param bool all: if true the common dictionary of the cells will be used
+        :param bool do_all: if true the common dictionary of the cells will be used
         :param int func: the number of the dictionary, where the fitted data will be saved
         :param bool show: if true the curve fitting will be plotted
         :param bool y: if true the axes will be inverted
@@ -38,10 +38,10 @@ class LMFit:
         function_colors = ["maroon", "midnightblue", "darkgreen", "darkmagenta", "darkorange"]
         for spike in range(5):
             string = f"{spike + 1}.spike"
-            if all:
-                df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, all=all)
+            if do_all:
+                df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, do_all=do_all)
             else:
-                df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, all=all)
+                df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, do_all=do_all)
 
             if y:
                 data = np.array(df["relative firing time"])
@@ -50,9 +50,9 @@ class LMFit:
                 x = np.array(df["relative firing time"])
                 data = np.array(df["IF"])
 
-            def func_min(params, x, data):
-                model = function(params=params, x=x)
-                return model - data
+            def func_min(ps, x_data, dat):
+                model = function(params=ps, x=x_data)
+                return model - dat
 
             # create a set of Parameters
             params = Parameters()
@@ -83,39 +83,39 @@ class LMFit:
             if y:
                 if func == 5:
                     if spike == 0:
-                        self.func_5[cell_name] = {}
-                    if string in self.func_5[cell_name]:
-                        self.func_5[cell_name][string] = function(params=result.params, x=x)
+                        self.func_dict["func_5"][cell_name] = {}
+                    if string in self.func_dict["func_5"][cell_name]:
+                        self.func_dict["func_5"][cell_name][string] = function(params=result.params, x=x)
                     else:
-                        self.func_5[cell_name][string] = None
-                        self.func_5[cell_name][string] = function(params=result.params, x=x)
+                        self.func_dict["func_5"][cell_name][string] = None
+                        self.func_dict["func_5"][cell_name][string] = function(params=result.params, x=x)
                 elif func == 6:
                     if spike == 0:
-                        self.func_6[cell_name] = {}
-                    if string in self.func_6[cell_name]:
-                        self.func_6[cell_name][string] = function(params=result.params, x=x)
+                        self.func_dict["func_6"][cell_name] = {}
+                    if string in self.func_dict["func_6"][cell_name]:
+                        self.func_dict["func_6"][cell_name][string] = function(params=result.params, x=x)
                     else:
-                        self.func_6[cell_name][string] = None
-                        self.func_6[cell_name][string] = function(params=result.params, x=x)
+                        self.func_dict["func_6"][cell_name][string] = None
+                        self.func_dict["func_6"][cell_name][string] = function(params=result.params, x=x)
                 elif func is None:
                     pass
             else:
                 if func == 1:
                     if spike == 0:
-                        self.func_1[cell_name] = {}
-                    if string in self.func_1[cell_name]:
-                        self.func_1[cell_name][string] = function(params=result.params, x=x)
+                        self.func_dict["func_1"][cell_name] = {}
+                    if string in self.func_dict["func_1"][cell_name]:
+                        self.func_dict["func_1"][cell_name][string] = function(params=result.params, x=x)
                     else:
-                        self.func_1[cell_name][string] = None
-                        self.func_1[cell_name][string] = function(params=result.params, x=x)
+                        self.func_dict["func_1"][cell_name][string] = None
+                        self.func_dict["func_1"][cell_name][string] = function(params=result.params, x=x)
                 elif func == 2:
                     if spike == 0:
-                        self.func_2[cell_name] = {}
-                    if string in self.func_2[cell_name]:
-                        self.func_2[cell_name][string] = function(params=result.params, x=x)
+                        self.func_dict["func_2"][cell_name] = {}
+                    if string in self.func_dict["func_2"][cell_name]:
+                        self.func_dict["func_2"][cell_name][string] = function(params=result.params, x=x)
                     else:
-                        self.func_2[cell_name][string] = None
-                        self.func_2[cell_name][string] = function(params=result.params, x=x)
+                        self.func_dict["func_2"][cell_name][string] = None
+                        self.func_dict["func_2"][cell_name][string] = function(params=result.params, x=x)
                 elif func is None:
                     pass
 
@@ -168,9 +168,9 @@ class LMFit:
         for spike in range(5):
             string = f"{spike + 1}.spike"
             if all:
-                df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, all=all)
+                df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, do_all=all)
             else:
-                df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, all=all)
+                df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, do_all=all)
 
             if y:
                 data = np.log10(df["relative firing time"])
@@ -179,9 +179,9 @@ class LMFit:
                 x = np.log10(df["relative firing time"])
                 data = np.log10(df["IF"])
 
-            def func_min(params, x, data):
-                model = function(params=params, x=x)
-                return model - data
+            def func_min(ps, x_data, dat):
+                model = function(params=ps, x=x_data)
+                return model - dat
 
             # create a set of Parameters
             params = Parameters()
@@ -199,43 +199,47 @@ class LMFit:
             if y:
                 if func == 7:
                     if spike == 0:
-                        self.func_7[cell_name] = {}
-                    if string in self.func_7[cell_name]:
-                        self.func_7[cell_name][string] = function(params=result.params, x=x)
+                        self.func_dict["func_7"][cell_name] = {}
+                    if string in self.func_dict["func_7"][cell_name]:
+                        self.func_dict["func_7"][cell_name][string] = function(params=result.params, x=x)
                     else:
-                        self.func_7[cell_name][string] = None
-                        self.func_7[cell_name][string] = function(params=result.params, x=x)
+                        self.func_dict["func_7"][cell_name][string] = None
+                        self.func_dict["func_7"][cell_name][string] = function(params=result.params, x=x)
                 elif func == 8:
                     if spike == 0:
-                        self.func_8[cell_name] = {}
-                    if string in self.func_8[cell_name]:
-                        self.func_8[cell_name][string] = function(params=result.params, x=x)
+                        self.func_dict["func_8"][cell_name] = {}
+                    if string in self.func_dict["func_8"][cell_name]:
+                        self.func_dict["func_8"][cell_name][string] = function(params=result.params, x=x)
                     else:
-                        self.func_8[cell_name][string] = None
-                        self.func_8[cell_name][string] = function(params=result.params, x=x)
+                        self.func_dict["func_8"][cell_name][string] = None
+                        self.func_dict["func_8"][cell_name][string] = function(params=result.params, x=x)
                 elif func is None:
                     pass
             else:
                 if func == 4:
                     if spike == 0:
-                        self.func_4[cell_name] = {}
-                    if string in self.func_4[cell_name]:
-                        self.func_4[cell_name][string] = function(params=result.params, x=x)
-                        self.func_4[cell_name][string] = 10 ** self.func_4[cell_name][string].values
+                        self.func_dict["func_4"][cell_name] = {}
+                    if string in self.func_dict["func_4"][cell_name]:
+                        self.func_dict["func_4"][cell_name][string] = function(params=result.params, x=x)
+                        self.func_dict["func_4"][cell_name][string] = \
+                            10 ** self.func_dict["func_4"][cell_name][string].values
                     else:
-                        self.func_4[cell_name][string] = None
-                        self.func_4[cell_name][string] = function(params=result.params, x=x)
-                        self.func_4[cell_name][string] = 10 ** self.func_4[cell_name][string].values
+                        self.func_dict["func_4"][cell_name][string] = None
+                        self.func_dict["func_4"][cell_name][string] = function(params=result.params, x=x)
+                        self.func_dict["func_4"][cell_name][string] = \
+                            10 ** self.func_dict["func_4"][cell_name][string].values
                 elif func == 3:
                     if spike == 0:
-                        self.func_3[cell_name] = {}
-                    if string in self.func_3[cell_name]:
-                        self.func_3[cell_name][string] = function(params=result.params, x=x)
-                        self.func_3[cell_name][string] = 10 ** self.func_3[cell_name][string].values
+                        self.func_dict["func_3"][cell_name] = {}
+                    if string in self.func_dict["func_3"][cell_name]:
+                        self.func_dict["func_3"][cell_name][string] = function(params=result.params, x=x)
+                        self.func_dict["func_3"][cell_name][string] = \
+                            10 ** self.func_dict["func_3"][cell_name][string].values
                     else:
-                        self.func_3[cell_name][string] = None
-                        self.func_3[cell_name][string] = function(params=result.params, x=x)
-                        self.func_3[cell_name][string] = 10 ** self.func_3[cell_name][string].values
+                        self.func_dict["func_3"][cell_name][string] = None
+                        self.func_dict["func_3"][cell_name][string] = function(params=result.params, x=x)
+                        self.func_dict["func_3"][cell_name][string] = \
+                            10 ** self.func_dict["func_3"][cell_name][string].values
                 elif func is None:
                     pass
 

@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
 
 from src.datamanipulator import DataManipulator
 from src.lm_fit import LMFit
@@ -14,79 +13,59 @@ class Evaluate:
     def __init__(self, data_class: DataManipulator, lm_fit: LMFit) -> None:
         """
         :param data_class: the DataManipulator class
-        :param data_dict: the dict that includes the cells
+        :param lm_fit: the LMFit class
         """
         self.data_class = data_class
         self.lm_fit = lm_fit
+        self.evaluate = dict()
+
+    def absolute_difference_count(self, cell_name, string, string_name, func_name, y):
+        self.evaluate[string_name] = np.abs(self.data_class.create_frame(cell_name=cell_name,
+                                                                         spike=string, y=y,
+                                                                         do_all=False)["relative firing time"] - \
+                                            self.lm_fit.func_dict[func_name][cell_name][string])
 
     def absolute_difference(self, cell_name: str, spike: str, y: bool) -> list:
         string = f"{spike}.spike"
         if y:
-            abs_1 = np.abs(self.data_class.create_frame(cell_name=cell_name,
-                                                        spike=string,
-                                                        y=True,
-                                                        all=False)["relative firing time"] - self.func_5[cell_name][
-                               string])
-            abs_2 = np.abs(self.data_class.create_frame(cell_name=cell_name,
-                                                        spike=string,
-                                                        y=True,
-                                                        all=False)["relative firing time"] - self.func_6[cell_name][
-                               string])
-            abs_3 = np.abs(self.data_class.create_frame(cell_name=cell_name,
-                                                        spike=string,
-                                                        y=True,
-                                                        all=False)["relative firing time"] - self.func_7[cell_name][
-                               string])
-            abs_4 = np.abs(self.data_class.create_frame(cell_name=cell_name,
-                                                        spike=string,
-                                                        y=True,
-                                                        all=False)["relative firing time"] - self.func_8[cell_name][
-                               string])
+            for i in range(4):
+                string_name = f"abs_{i + 1}"
+                func_name = f"func_{i + 5}"
+                self.absolute_difference_count(cell_name=cell_name, string=string, string_name=string_name,
+                                               func_name=func_name, y=y)
         else:
-            abs_1 = np.abs(self.data_class.create_frame(cell_name=cell_name,
-                                                        spike=string,
-                                                        y=False,
-                                                        all=False)["IF"] - self.func_1[cell_name][string])
-            abs_2 = np.abs(self.data_class.create_frame(cell_name=cell_name,
-                                                        spike=string,
-                                                        y=False,
-                                                        all=False)["IF"] - self.func_2[cell_name][string])
-            abs_3 = np.abs(self.data_class.create_frame(cell_name=cell_name,
-                                                        spike=string,
-                                                        y=False,
-                                                        all=False)["IF"] - self.func_3[cell_name][string])
-            abs_4 = np.abs(self.data_class.create_frame(cell_name=cell_name,
-                                                        spike=string,
-                                                        y=False,
-                                                        all=False)["IF"] - self.func_4[cell_name][string])
+            for i in range(4):
+                string_name = f"abs_{i + 1}"
+                func_name = f"func_{i + 1}"
+                self.absolute_difference_count(cell_name=cell_name, string=string, string_name=string_name,
+                                               func_name=func_name, y=y)
 
-        print(f"The 1st fit difference: {abs_1}")
-        print(f"The 2nd fit difference: {abs_2}")
-        print(f"The 3rd fit difference: {abs_3}")
-        print(f"The 4th fit difference: {abs_4}")
+        for i in range(4):
+            string_name = f"abs_{i + 1}"
+            print(f"The {i+1}. fit difference: {self.evaluate[string_name]}")
 
-        plt.plot(abs_1, 'o', c='r')
-        plt.plot(abs_2, 'o', c='g')
-        plt.plot(abs_3, 'o', c='b')
-        plt.plot(abs_4, 'o', c='darkmagenta')
+        plt.plot(self.evaluate["abs_1"], 'o', c='r')
+        plt.plot(self.evaluate["abs_2"], 'o', c='g')
+        plt.plot(self.evaluate["abs_3"], 'o', c='b')
+        plt.plot(self.evaluate["abs_4"], 'o', c='darkmagenta')
         plt.legend()
         plt.title("Absolute difference for each point")
         plt.show()
 
-        print(f"The 1st fit sum: {np.sum(abs_1)}")
-        print(f"The 1st fit sum: {np.sum(abs_2)}")
-        print(f"The 1st fit sum: {np.sum(abs_3)}")
-        print(f"The 1st fit sum: {np.sum(abs_4)}")
+        for i in range(4):
+            string_name = f"abs_{i + 1}"
+            print(f"The {i + 1}. fit sum: {np.sum(self.evaluate[string_name])}")
 
         smallest = []
 
-        for i in range(len(abs_1)):
-            minimum = np.min(np.array([abs_1[i], abs_2[i], abs_3[i], abs_4[i]]))
-            if minimum == abs_1[i]:
+        for i in range(len(self.evaluate["abs_1"])):
+            minimum = np.min(np.array([self.evaluate["abs_1"][i], self.evaluate["abs_2"][i], self.evaluate["abs_3"][i],
+                                       self.evaluate["abs_4"][i]]))
+            if minimum == self.evaluate["abs_1"][i]:
                 smallest.append("func_1")
-            elif minimum == abs_2[i]:
+            elif minimum == self.evaluate["abs_2"][i]:
                 smallest.append("func_2")
-            elif minimum == abs_3[i]:
+            elif minimum == self.evaluate["abs_3"][i]:
                 smallest.append("func_3")
             else:
                 smallest.append("func_4")
