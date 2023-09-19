@@ -29,7 +29,7 @@ class Evaluate:
         string = f"{spike}.spike"
         if y:
             for i in range(4):
-                string_name = f"abs_{i + 1}"
+                string_name = f"abs_{i + 5}"
                 func_name = f"func_{i + 5}"
                 self.absolute_difference_count(cell_name=cell_name, string=string, string_name=string_name,
                                                func_name=func_name, y=y)
@@ -42,15 +42,23 @@ class Evaluate:
 
         for i in range(4):
             string_name = f"abs_{i + 1}"
-            print(f"The {i+1}. fit difference: {self.evaluate[string_name]}")
-
-        plt.plot(self.evaluate["abs_1"], 'o', c='r')
-        plt.plot(self.evaluate["abs_2"], 'o', c='g')
-        plt.plot(self.evaluate["abs_3"], 'o', c='b')
-        plt.plot(self.evaluate["abs_4"], 'o', c='darkmagenta')
-        plt.legend()
-        plt.title("Absolute difference for each point")
-        plt.show()
+            print(f"The {i + 1}. fit difference: {self.evaluate[string_name]}")
+        if not y:
+            plt.plot(self.evaluate["abs_1"], 'o', c='r')
+            plt.plot(self.evaluate["abs_2"], 'o', c='g')
+            plt.plot(self.evaluate["abs_3"], 'o', c='b')
+            plt.plot(self.evaluate["abs_4"], 'o', c='darkmagenta')
+            plt.legend()
+            plt.title("Absolute difference for each point")
+            plt.show()
+        else:
+            plt.plot(self.evaluate["abs_5"], 'o', c='r')
+            plt.plot(self.evaluate["abs_6"], 'o', c='g')
+            plt.plot(self.evaluate["abs_7"], 'o', c='b')
+            plt.plot(self.evaluate["abs_8"], 'o', c='darkmagenta')
+            plt.legend()
+            plt.title("Absolute difference for each point")
+            plt.show()
 
         for i in range(4):
             string_name = f"abs_{i + 1}"
