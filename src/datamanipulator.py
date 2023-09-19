@@ -20,7 +20,7 @@ class DataManipulator:
 
     def all_in_one_dict_creating(self, gbz_dict) -> dict:
         spike = 1
-        for name in self.names:
+        for name in [x[0] for x in self.data.columns][::2]:
             for idx in range(0, len(self.data[name]["IF"])):
                 if math.isnan(self.data[name]["IF"][idx]) is True:
                     spike = 1
@@ -35,7 +35,7 @@ class DataManipulator:
 
     def create_cell_dict(self, gbz_dict) -> dict:
         spike = 1
-        for name in self.names:
+        for name in [x[0] for x in self.data.columns][::2]:
             gbz_dict[name] = {}
             for idx in range(0, len(self.data[name]["IF"])):
                 if math.isnan(self.data[name]["IF"][idx]) is True:
