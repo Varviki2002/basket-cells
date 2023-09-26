@@ -27,7 +27,7 @@ class Plotter:
         :param bool all: if true the common dict from all the cells will be plotted, if false the given cell
         """
         if all:
-            all_dict = self.data_class.create_dict(all_in_one=True)
+            all_dict = self.data_class.all_in_one_dict
             plt.scatter(all_dict[spike_name]["relative firing time"],
                         all_dict[spike_name]["IF"], c=color)
         else:
