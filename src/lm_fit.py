@@ -61,8 +61,7 @@ class LMFit:
                     data = np.array(df["IF"])
 
             result = self.fit_the_function(func_class=func_class, param_values=param_values, x=x, data=data)
-            final = func_class(params=result.params,
-                               x=np.linspace(np.min(x), np.max(x), 201))
+            final = func_class(params=result.params, x=np.linspace(np.min(x), np.max(x), 201))
 
             # self.func_dict[name_to_save][cell_name][string] = None
             self.func_dict[name_to_save][cell_name][string] = func_class(params=result.params, x=x)
@@ -74,9 +73,7 @@ class LMFit:
                 if log:
                     plt.xscale('log')
                     plt.yscale('log')
-                    plt.plot(10 ** x,
-                             10 ** data,
-                             'o', c=colors[spike])
+                    plt.plot(10 ** x, 10 ** data, 'o', c=colors[spike])
                     plt.plot(10 ** np.linspace(np.min(x), np.max(x), 201),
                              10 ** final,
                              'r', c=function_colors[spike])

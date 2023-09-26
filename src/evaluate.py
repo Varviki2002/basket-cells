@@ -47,8 +47,8 @@ class Evaluate:
             self.squared_diff_dict[cell_name] = dict()
         for num in count_threshold:
             df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, do_all=do_all)
-            x = np.log10(df["relative firing time"][0:num])
-            data = np.log10(df["IF"][0:num])
+            x = np.log10(df["relative firing time"][0:int(num)])
+            data = np.log10(df["IF"][0:int(num)])
             result = self.lm_fit.fit_the_function(func_class=func_class, param_values=param_values, x=x, data=data)
             final = func_class(params=result.params, x=x)
             self.squared_diff_dict[cell_name][str(num)] = (data - final) ** 2
