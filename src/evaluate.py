@@ -18,6 +18,40 @@ class Evaluate:
         self.data_class = data_class
         self.lm_fit = lm_fit
         self.evaluate = dict()
+        self.squared_diff_dict = dict()
+
+    def squared_difference(self, string_name, cell_name, string, y, func_name):
+        if y:
+            original_data = np.log10(self.data_class.create_frame(cell_name=cell_name, spike=string, y=y,
+                                                                  do_all=False)["relative firing time"])
+            if func_name == 1 or func_name == 2:
+                fitted_data = np.log10(self.lm_fit.func_dict[func_name][cell_name][string])
+            else:
+                fitted_data = self.lm_fit.func_dict[func_name][cell_name][string]
+        else:
+            original_data = np.log10(self.data_class.create_frame(cell_name=cell_name, spike=string, y=y,
+                                                                  do_all=False)["IF"])
+            if func_name == 1 or func_name == 2:
+                fitted_data = np.log10(self.lm_fit.func_dict[func_name][cell_name][string])
+            else:
+                fitted_data = self.lm_fit.func_dict[func_name][cell_name][string]
+
+        self.evaluate[string_name] = (original_data - fitted_data) ** 2
+
+    def count_if_threshold(self, cell_name, do_all, func_class, param_values=(2, 0)):
+        string = f"{1}.spike"
+        func_dict = self.data_class.dict[cell_name][string]
+        count_threshold = list(np.arange(5, len(func_dict["IF"]), 10))
+        count_threshold.append(func_dict["IF"][len(func_dict["IF"])-1])
+        if cell_name not in self.squared_diff_dict:
+            self.squared_diff_dict[cell_name] = dict()
+        for num in count_threshold:
+            df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, do_all=do_all)
+            x = np.log10(df["relative firing time"][0:num])
+            data = np.log10(df["IF"][0:num])
+            result = self.lm_fit.fit_the_function(func_class=func_class, param_values=param_values, x=x, data=data)
+            final = func_class(params=result.params, x=x)
+            self.squared_diff_dict[cell_name][str(num)] = (data - final) ** 2
 
     def absolute_difference_count(self, cell_name, string, string_name, func_name, y):
         self.evaluate[string_name] = np.abs(self.data_class.create_frame(cell_name=cell_name,

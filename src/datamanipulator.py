@@ -14,8 +14,9 @@ class DataManipulator:
         {"the name of the cells":{"the number of the spike":{"relative firing-time:[], "IF":[]}}}
         """
         self.data = data
-        self.dict = self.create_dict(all_in_one=False)
-        self.all_in_one_dict = self.create_dict(all_in_one=True)
+        self.dict = {}
+        self.all_in_one_dict = {}
+        self.__create_dict()
         self.names = [x[0] for x in self.data.columns][::2]
 
     def all_in_one_dict_creating(self, gbz_dict) -> dict:
@@ -50,20 +51,13 @@ class DataManipulator:
                     spike += 1
         return gbz_dict
 
-    def create_dict(self, all_in_one: bool) -> dict:
+    def __create_dict(self) -> None:
         """
         This method creates a dictionary from the data.
-        :param bool all_in_one: if true there won't be cell names in the dictionary, just the spikes from every cells
-        :return dict: the created nested dictionary
+        :return None
         """
-        if all_in_one:
-            gbz_dict = {}
-            self.all_in_one_dict_creating(gbz_dict=gbz_dict)
-            return gbz_dict
-        else:
-            gbz_dict = {}
-            self.create_cell_dict(gbz_dict=gbz_dict)
-            return gbz_dict
+        self.all_in_one_dict_creating(gbz_dict=self.all_in_one_dict)
+        self.create_cell_dict(gbz_dict=self.dict)
 
     def create_frame(self, cell_name: str, spike: str, y: bool, do_all: bool) -> pd.DataFrame:
         """
