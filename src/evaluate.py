@@ -20,7 +20,7 @@ class Evaluate:
         self.evaluate = dict()
         self.squared_diff_dict = dict()
 
-    def squared_difference(self, string_name, cell_name, string, y, func_name):
+    def squared_difference(self, string_name, cell_name, string, y, func_name, func_num):
         if y:
             original_data = np.log10(self.data_class.create_frame(cell_name=cell_name, spike=string, y=y,
                                                                   do_all=False)["relative firing time"])
