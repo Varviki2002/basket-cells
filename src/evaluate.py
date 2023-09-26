@@ -42,7 +42,7 @@ class Evaluate:
         string = f"{1}.spike"
         func_dict = self.data_class.dict[cell_name][string]
         count_threshold = list(np.arange(5, len(func_dict["IF"]), 10))
-        count_threshold.append(func_dict["IF"][len(func_dict["IF"])-1])
+        count_threshold.append(len(func_dict["IF"]))
         if cell_name not in self.squared_diff_dict:
             self.squared_diff_dict[cell_name] = dict()
         for num in count_threshold:
