@@ -24,7 +24,7 @@ class Evaluate:
         if y:
             original_data = np.log10(self.data_class.create_frame(cell_name=cell_name, spike=string, y=y,
                                                                   do_all=False)["relative firing time"])
-            if func_name == 1 or func_name == 2:
+            if func_num == 1 or func_num == 2:
                 fitted_data = np.log10(self.lm_fit.func_dict[func_name][cell_name][string])
             else:
                 fitted_data = self.lm_fit.func_dict[func_name][cell_name][string]
