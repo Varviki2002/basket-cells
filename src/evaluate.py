@@ -28,15 +28,15 @@ class Evaluate:
         self.linear_regression_parameters[cell_name][spike_name] = dict()
         threshold = [50, 70, 90, 110, 130, 150, 170, 190]
         threshold = np.log10(threshold)
-        rft = list(np.log10(self.data_class.dict[cell_name][spike_name]["relative firing time"]))
-        inst_f = list(np.log10(self.data_class.dict[cell_name][spike_name]["IF"]))
+        rft = np.log10(self.data_class.dict[cell_name][spike_name]["relative firing time"])
+        inst_f = np.log10(self.data_class.dict[cell_name][spike_name]["IF"])
 
         for num in threshold:
             self.linear_regression_parameters[cell_name][spike_name][num] = dict()
             for i in range(len(inst_f)):
                 if inst_f[i] > num:
-                    inst_f.remove(inst_f[i])
-                    rft.remove(rft[i])
+                    inst_f.delete(inst_f[i])
+                    rft.delete(rft[i])
 
             result = self.lm_fit.fit_the_function(func_class=func_class, param_values=param_values,
                                                   x=rft, data=inst_f)
