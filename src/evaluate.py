@@ -32,7 +32,7 @@ class Evaluate:
         inst_f = np.log10(self.data_class.dict[cell_name][spike_name]["IF"])
 
         for num in threshold:
-            self.linear_regression_parameters[cell_name][spike_name][num] = dict()
+            self.linear_regression_parameters[cell_name][spike_name][10 ** num] = dict()
             for i in range(len(inst_f)-1, -1, -1):
                 if inst_f[i] > num:
                     np.delete(inst_f, i)
