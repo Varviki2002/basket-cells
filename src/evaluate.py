@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import statsmodels.api as sm
 
 from src.datamanipulator import DataManipulator
 from src.lm_fit import LMFit
@@ -19,6 +20,44 @@ class Evaluate:
         self.lm_fit = lm_fit
         self.evaluate = dict()
         self.squared_diff_dict = dict()
+        self.linear_regression_parameters = dict()
+
+    def count_if_threshold(self, cell_name, spike_name, func_class, param_values):
+        if cell_name not in self.linear_regression_parameters:
+            self.linear_regression_parameters[cell_name] = dict()
+        self.linear_regression_parameters[cell_name][spike_name] = dict()
+        threshold = [50, 70, 90, 110, 130, 150, 170, 190]
+        threshold = np.log10(threshold)
+        rft = np.log10(self.data_class.dict[cell_name][spike_name]["relative firing time"])
+        inst_f = np.log10(self.data_class.dict[cell_name][spike_name]["IF"])
+
+        for num in threshold:
+            self.linear_regression_parameters[cell_name][spike_name][num] = dict()
+            for i in range(len(inst_f)):
+                if inst_f[i] > num:
+                    inst_f.remove(inst_f[i])
+                    rft.remove(rft[i])
+
+            result = self.lm_fit.fit_the_function(func_class=func_class, param_values=param_values,
+                                                  x=rft, data=inst_f)
+            final = func_class(params=result.params, x=rft)
+            mean = np.mean(inst_f)
+            r_2 = (np.sum((mean-inst_f) ** 2) - np.sum((inst_f - final) ** 2)) / np.sum((mean-inst_f) ** 2)
+            p, r_square, conf_int = self.linear_regression(x=rft, y=inst_f)
+            self.linear_regression_parameters[cell_name][spike_name][num]["p"] = p
+            self.linear_regression_parameters[cell_name][spike_name][num]["r_square"] = r_square
+            self.linear_regression_parameters[cell_name][spike_name][num]["conf_int"] = conf_int
+            self.linear_regression_parameters[cell_name][spike_name][num]["r_2"] = r_2
+
+    @staticmethod
+    def linear_regression(x, y):
+        x = sm.add_constant(x)
+        model = sm.OLS(y, x)
+        result = model.fit()
+        p = result.pvalues
+        r_square = result.rsquared
+        conf_int = result.conf_int(alpha=0.05, cols=None)
+        return p, r_square, conf_int
 
     def squared_difference(self, string_name, cell_name, string, y, func_name, func_num):
         if y:
@@ -38,7 +77,7 @@ class Evaluate:
 
         self.evaluate[string_name] = (original_data - fitted_data) ** 2
 
-    def count_if_threshold(self, cell_name, do_all, func_class, param_values=(2, 0)):
+    def count_if(self, cell_name, do_all, func_class, param_values=(2, 0)):
         string = f"{1}.spike"
         func_dict = self.data_class.dict[cell_name][string]
         count_threshold = list(np.arange(5, len(func_dict["IF"]), 10))
