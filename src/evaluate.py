@@ -28,8 +28,8 @@ class Evaluate:
         self.linear_regression_parameters[cell_name][spike_name] = dict()
         threshold = [50, 70, 90, 110, 130, 150, 170, 190]
         threshold = np.log10(threshold)
-        rft = np.log10(self.data_class.dict[cell_name][spike_name]["relative firing time"])
-        inst_f = np.log10(self.data_class.dict[cell_name][spike_name]["IF"])
+        rft = list(np.log10(self.data_class.dict[cell_name][spike_name]["relative firing time"]))
+        inst_f = list(np.log10(self.data_class.dict[cell_name][spike_name]["IF"]))
 
         for num in threshold:
             self.linear_regression_parameters[cell_name][spike_name][num] = dict()
