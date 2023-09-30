@@ -44,10 +44,10 @@ class Evaluate:
             mean = np.mean(inst_f)
             r_2 = (np.sum((mean-inst_f) ** 2) - np.sum((inst_f - final) ** 2)) / np.sum((mean-inst_f) ** 2)
             p, r_square, conf_int = self.linear_regression(x=rft, y=inst_f)
-            self.linear_regression_parameters[cell_name][spike_name][num]["p"] = p
-            self.linear_regression_parameters[cell_name][spike_name][num]["r_square"] = r_square
-            self.linear_regression_parameters[cell_name][spike_name][num]["conf_int"] = conf_int
-            self.linear_regression_parameters[cell_name][spike_name][num]["r_2"] = r_2
+            self.linear_regression_parameters[cell_name][spike_name][10 ** num]["p"] = p
+            self.linear_regression_parameters[cell_name][spike_name][10 ** num]["r_square"] = r_square
+            self.linear_regression_parameters[cell_name][spike_name][10 ** num]["conf_int"] = conf_int
+            self.linear_regression_parameters[cell_name][spike_name][10 ** num]["r_2"] = r_2
 
     @staticmethod
     def linear_regression(x, y):
