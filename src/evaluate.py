@@ -33,10 +33,10 @@ class Evaluate:
 
         for num in threshold:
             self.linear_regression_parameters[cell_name][spike_name][num] = dict()
-            for i in range(len(inst_f)):
+            for i in range(len(inst_f)-1, -1, -1):
                 if inst_f[i] > num:
-                    inst_f.delete(inst_f[i])
-                    rft.delete(rft[i])
+                    np.delete(inst_f, inst_f[i])
+                    np.delete(rft, rft[i])
 
             result = self.lm_fit.fit_the_function(func_class=func_class, param_values=param_values,
                                                   x=rft, data=inst_f)
