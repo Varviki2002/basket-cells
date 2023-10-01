@@ -40,6 +40,8 @@ class Evaluate:
                 if dict_frame["IF"].iloc[i] > num:
                     df.drop([i], inplace=True)
             df.reset_index(inplace=True)
+            if df.shape[0] == 0:
+                continue
             result = self.lm_fit.fit_the_function(func_class=func_class, param_values=param_values,
                                                   x=df["relative firing time"], data=df["IF"])
             final = func_class(params=result.params, x=df["relative firing time"])
