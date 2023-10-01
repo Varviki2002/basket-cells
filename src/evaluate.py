@@ -40,6 +40,7 @@ class Evaluate:
                 if dict_frame["IF"].iloc[i] > num:
                     df.drop([i], inplace=True)
             df = df.reset_index(inplace=True)
+            print(df)
             if df.shape[0] == 0:
                 continue
             result = self.lm_fit.fit_the_function(func_class=func_class, param_values=param_values,
