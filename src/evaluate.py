@@ -39,7 +39,7 @@ class Evaluate:
             for i in range(dict_frame.shape[0]-1, -1, -1):
                 if dict_frame["IF"].iloc[i] > num:
                     df.drop([i], inplace=True)
-            df.reset_index(inplace=True)
+            df = df.reset_index(inplace=True)
             if df.shape[0] == 0:
                 continue
             result = self.lm_fit.fit_the_function(func_class=func_class, param_values=param_values,
