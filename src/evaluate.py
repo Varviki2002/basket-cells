@@ -36,7 +36,7 @@ class Evaluate:
         for num in threshold:
             self.linear_regression_parameters[cell_name][spike_name][10 ** num] = dict()
             df = dict_frame
-            for i in range(dict_frame.shape[0]-1, -1, -1):
+            for i in range(0, dict_frame.shape[0]):
                 if dict_frame["IF"].iloc[i] > num:
                     df.drop([i], inplace=True)
             df = df.reset_index(inplace=True)
