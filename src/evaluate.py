@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 import statsmodels.api as sm
 
 from src.datamanipulator import DataManipulator
@@ -28,22 +29,23 @@ class Evaluate:
         self.linear_regression_parameters[cell_name][spike_name] = dict()
         threshold = [50, 70, 90, 110, 130, 150, 170, 190]
         threshold = np.log10(threshold)
+        dict_frame = self.data_class.create_frame(cell_name=cell_name, spike=spike_name, y=False, do_all=False)
         rft = np.log10(self.data_class.dict[cell_name][spike_name]["relative firing time"])
         inst_f = np.log10(self.data_class.dict[cell_name][spike_name]["IF"])
 
         for num in threshold:
             self.linear_regression_parameters[cell_name][spike_name][10 ** num] = dict()
-            for i in range(len(inst_f)-1, -1, -1):
-                if inst_f[i] > num:
-                    np.delete(inst_f, i)
-                    np.delete(rft, i)
-
+            df = dict_frame
+            for i in range(dict_frame.shape[0]-1, -1, -1):
+                if dict_frame["IF"].iloc[i] > num:
+                    df.drop([i], inplace=True)
+            df.reset_index(inplace=True)
             result = self.lm_fit.fit_the_function(func_class=func_class, param_values=param_values,
-                                                  x=rft, data=inst_f)
-            final = func_class(params=result.params, x=rft)
-            mean = np.mean(inst_f)
-            r_2 = (np.sum((mean-inst_f) ** 2) - np.sum((inst_f - final) ** 2)) / np.sum((mean-inst_f) ** 2)
-            p, r_square, conf_int = self.linear_regression(x=rft, y=inst_f)
+                                                  x=df["relative firing time"], data=df["IF"])
+            final = func_class(params=result.params, x=df["relative firing time"])
+            mean = np.mean(df["IF"])
+            r_2 = (np.sum((mean-df["IF"]) ** 2) - np.sum((df["IF"] - final) ** 2)) / np.sum((mean-df["IF"]) ** 2)
+            p, r_square, conf_int = self.linear_regression(x=df["relative firing time"], y=df["IF"])
             self.linear_regression_parameters[cell_name][spike_name][10 ** num]["p"] = p
             self.linear_regression_parameters[cell_name][spike_name][10 ** num]["r_square"] = r_square
             self.linear_regression_parameters[cell_name][spike_name][10 ** num]["conf_int"] = conf_int
@@ -58,6 +60,11 @@ class Evaluate:
         r_square = result.rsquared
         conf_int = result.conf_int(alpha=0.05, cols=None)
         return p, r_square, conf_int
+
+    def t_test(self):
+        results = sm.OLS(data.endog, data.exog).fit()
+        r = np.zeros_like(results.params)
+        r[5:] = [1, -1]
 
     def squared_difference(self, string_name, cell_name, string, y, func_name, func_num):
         if y:
