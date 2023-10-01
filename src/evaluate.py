@@ -37,7 +37,7 @@ class Evaluate:
             self.linear_regression_parameters[cell_name][spike_name][10 ** num] = dict()
             df = dict_frame
             for i in range(0, dict_frame.shape[0]):
-                if dict_frame["IF"].iloc[i] > num:
+                if dict_frame.iloc[i, 1] > num:
                     df.drop([i], inplace=True)
             df = df.reset_index(inplace=True)
             print(df)
