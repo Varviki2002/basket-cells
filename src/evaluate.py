@@ -5,6 +5,7 @@ import statsmodels.api as sm
 
 from src.datamanipulator import DataManipulator
 from src.lm_fit import LMFit
+from src.plot import Plotter
 
 
 class Evaluate:
@@ -12,7 +13,7 @@ class Evaluate:
     This class makes the evaluation.
     """
 
-    def __init__(self, data_class: DataManipulator, lm_fit: LMFit) -> None:
+    def __init__(self, data_class: DataManipulator, lm_fit: LMFit, plotter: Plotter) -> None:
         """
         :param data_class: the DataManipulator class
         :param lm_fit: the LMFit class
@@ -22,6 +23,7 @@ class Evaluate:
         self.evaluate = dict()
         self.squared_diff_dict = dict()
         self.linear_regression_parameters = dict()
+        self.plotter = plotter
 
     def count_if_threshold(self, cell_name, spike_name, func_class, param_values):
         if cell_name not in self.linear_regression_parameters:
@@ -31,8 +33,6 @@ class Evaluate:
         threshold = np.log10(threshold)
         dict_frame = np.log10(self.data_class.create_frame(cell_name=cell_name, spike=spike_name,
                                                            y=False, do_all=False))
-        rft = np.log10(self.data_class.dict[cell_name][spike_name]["relative firing time"])
-        inst_f = np.log10(self.data_class.dict[cell_name][spike_name]["IF"])
 
         for num in threshold:
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)] = dict()
@@ -45,11 +45,15 @@ class Evaluate:
             final = func_class(params=result.params, x=df["relative firing time"])
             mean = np.mean(df["IF"])
             r_2 = (np.sum((mean-df["IF"]) ** 2) - np.sum((df["IF"] - final) ** 2)) / np.sum((mean-df["IF"]) ** 2)
-            p, r_square, conf_int = self.linear_regression(x=df["relative firing time"], y=df["IF"])
+            p, r_square, conf_int, fp, f = self.linear_regression(x=df["relative firing time"], y=df["IF"])
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["p"] = p
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["r_square"] = r_square
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["conf_int"] = conf_int
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["r_2"] = r_2
+            self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["fp"] = fp
+            self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["f"] = f
+
+            self.plotter.different_if_plotter(df=df, p=p)
 
     @staticmethod
     def linear_regression(x, y):
@@ -59,12 +63,12 @@ class Evaluate:
         p = result.pvalues
         r_square = result.rsquared
         conf_int = result.conf_int(alpha=0.05, cols=None)
-        return p, r_square, conf_int
+        fp = result.f_pvalue
+        f = result.fvalue
+        return p, r_square, conf_int, fp, f
 
-    def t_test(self, x, y):
-        results = self.linear_regression(x=x, y=y)
-        r = np.zeros_like(results.params)
-        r[5:] = [1, -1]
+    def compare_values_to_original(self):
+        pass
 
     def squared_difference(self, string_name, cell_name, string, y, func_name, func_num):
         if y:

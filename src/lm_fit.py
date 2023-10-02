@@ -16,6 +16,7 @@ class LMFit:
         self.all_in_one_dict = data_class.all_in_one_dict
         self.names = data_class.names
         self.func_dict = {}
+        self.coeff = dict()
 
     def create_lmfit_curve_fit(self, cell_name: str, plot_name: str, func_class,
                                do_all: bool, show: bool, switch_axes: bool, name_to_save: str,
@@ -44,6 +45,9 @@ class LMFit:
                                                   do_all=do_all, log=log, switch_axes=switch_axes)
 
             result = self.fit_the_function(func_class=func_class, param_values=param_values, x=x, data=data)
+            if cell_name not in self.coeff:
+                self.coeff[cell_name] = dict()
+            self.coeff[cell_name][string] = list(result.params.valuesdict().values())
             final = func_class(params=result.params, x=np.linspace(np.min(x), np.max(x), 201))
 
             # self.func_dict[name_to_save][cell_name][string] = None
@@ -86,6 +90,7 @@ class LMFit:
             parameters.add(string, value=fit_params[0], min=fit_params[1])
         return parameters
 
+    @staticmethod
     def show_the_fit_results(self, df: pd.DataFrame, num_params: int, result, spike: int) -> pd.DataFrame:
         letters = ["a1", "a2", "a3", "a4"]
         for i in range(num_params):
