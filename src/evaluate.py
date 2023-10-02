@@ -35,7 +35,7 @@ class Evaluate:
         inst_f = np.log10(self.data_class.dict[cell_name][spike_name]["IF"])
 
         for num in threshold:
-            self.linear_regression_parameters[cell_name][spike_name][10 ** num] = dict()
+            self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)] = dict()
             df = dict_frame
             for i in range(0, len(dict_frame)):
                 if dict_frame["IF"].iloc[i] > num:

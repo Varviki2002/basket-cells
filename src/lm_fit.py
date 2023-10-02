@@ -4,10 +4,12 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from src.datamanipulator import DataManipulator
+from src.plot import Plotter
 
 
 class LMFit:
-    def __init__(self, data_class: DataManipulator):
+    def __init__(self, data_class: DataManipulator, plotter: Plotter):
+        self.plotter = plotter
         self.data_class = data_class
         self.data = data_class.data
         self.data_dict = data_class.dict
@@ -33,8 +35,6 @@ class LMFit:
         :return -> pd.DataFrames: the parameters and their values will be shown
         """
         df_n = pd.DataFrame(index=self.letter[:func_class.n_params], columns=["1", "2", "3", "4", "5"]).fillna(0)
-        colors = ["r", "b", "g", "mediumpurple", "gold"]
-        function_colors = ["maroon", "midnightblue", "darkgreen", "darkmagenta", "darkorange"]
         if name_to_save not in self.func_dict:
             self.func_dict[name_to_save] = dict()
         self.func_dict[name_to_save][cell_name] = dict()
@@ -71,18 +71,11 @@ class LMFit:
                 df_n = self.show_the_fit_results(df=df_n, num_params=func_class.n_params, result=result, spike=spike)
                 # plot results
                 if log:
-                    plt.xscale('log')
-                    plt.yscale('log')
-                    plt.plot(10 ** x, 10 ** data, 'o', c=colors[spike])
-                    plt.plot(10 ** np.linspace(np.min(x), np.max(x), 201),
-                             10 ** final,
-                             'r', c=function_colors[spike])
-                    plt.title(plot_name)
+                    self.plotter.plot_fitted_data(x=x, data=data, final=final, log=log,
+                                                  spike=spike, plot_name=plot_name)
                 else:
-                    plt.plot(x, data, 'o', c=colors[spike])
-                    plt.plot(np.linspace(np.min(x), np.max(x), 201), final, 'r', c=function_colors[spike])
-                    plt.title(plot_name)
-                    # plt.show()
+                    self.plotter.plot_fitted_data(x=x, data=data, final=final, log=log,
+                                                  spike=spike, plot_name=plot_name)
 
             else:
                 pass

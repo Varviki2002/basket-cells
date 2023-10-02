@@ -1,6 +1,7 @@
 from random import random
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 from src.datamanipulator import DataManipulator
 
@@ -65,4 +66,22 @@ class Plotter:
         plt.xlabel("relative firing time")
         plt.ylabel("IF")
         plt.show()
+
+    @staticmethod
+    def plot_fitted_data(x, data, final, log, spike, plot_name):
+        colors = ["r", "b", "g", "mediumpurple", "gold"]
+        function_colors = ["maroon", "midnightblue", "darkgreen", "darkmagenta", "darkorange"]
+        if log:
+            plt.xscale('log')
+            plt.yscale('log')
+            plt.plot(10 ** x, 10 ** data, 'o', c=colors[spike])
+            plt.plot(10 ** np.linspace(np.min(x), np.max(x), 201),
+                     10 ** final,
+                     'r', c=function_colors[spike])
+            plt.title(plot_name)
+        else:
+            plt.plot(x, data, 'o', c=colors[spike])
+            plt.plot(np.linspace(np.min(x), np.max(x), 201), final, 'r', c=function_colors[spike])
+            plt.title(plot_name)
+            # plt.show()
 
