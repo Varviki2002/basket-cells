@@ -29,16 +29,17 @@ class Evaluate:
         self.linear_regression_parameters[cell_name][spike_name] = dict()
         threshold = [50, 70, 90, 110, 130, 150, 170, 190]
         threshold = np.log10(threshold)
-        dict_frame = self.data_class.create_frame(cell_name=cell_name, spike=spike_name, y=False, do_all=False)
+        dict_frame = np.log10(self.data_class.create_frame(cell_name=cell_name, spike=spike_name,
+                                                           y=False, do_all=False))
         rft = np.log10(self.data_class.dict[cell_name][spike_name]["relative firing time"])
         inst_f = np.log10(self.data_class.dict[cell_name][spike_name]["IF"])
 
         for num in threshold:
             self.linear_regression_parameters[cell_name][spike_name][10 ** num] = dict()
             df = dict_frame
-            for i in range(0, dict_frame.shape[0]):
-                if dict_frame.iloc[i, 1] > num:
-                    df.drop([i], inplace=True)
+            for i in range(0, len(dict_frame)):
+                if dict_frame["IF"].iloc[i] > num:
+                    df = df.drop(labels=i, axis=0)
             df = df.reset_index(inplace=True)
             print(df)
             if df.shape[0] == 0:
@@ -64,8 +65,8 @@ class Evaluate:
         conf_int = result.conf_int(alpha=0.05, cols=None)
         return p, r_square, conf_int
 
-    def t_test(self):
-        results = sm.OLS(data.endog, data.exog).fit()
+    def t_test(self, x, y):
+        results = self.linear_regression(x=x, y=y)
         r = np.zeros_like(results.params)
         r[5:] = [1, -1]
 
