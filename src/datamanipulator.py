@@ -1,5 +1,6 @@
 import math
 import pandas as pd
+import numpy as np
 
 
 class DataManipulator:
@@ -86,6 +87,28 @@ class DataManipulator:
                 df = pd.DataFrame.from_dict(self.dict[cell_name][spike])
                 df.sort_values(by="IF", ascending=False, inplace=True)
                 return df
+
+    def define_axes(self, cell_name, string, do_all, log, switch_axes):
+        if do_all:
+            df = self.create_frame(cell_name=cell_name, spike=string, y=False, do_all=do_all)
+        else:
+            df = self.create_frame(cell_name=cell_name, spike=string, y=False, do_all=do_all)
+
+        if log:
+            if switch_axes:
+                data = np.log10(df["relative firing time"])
+                x = np.log10(df["IF"])
+            else:
+                x = np.log10(df["relative firing time"])
+                data = np.log10(df["IF"])
+        else:
+            if switch_axes:
+                data = np.array(df["relative firing time"])
+                x = np.array(df["IF"])
+            else:
+                x = np.array(df["relative firing time"])
+                data = np.array(df["IF"])
+        return x, data
 
     def measurements(self) -> pd.DataFrame:
         """

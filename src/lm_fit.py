@@ -15,7 +15,6 @@ class LMFit:
         self.data_dict = data_class.dict
         self.all_in_one_dict = data_class.all_in_one_dict
         self.names = data_class.names
-        self.letter = ["a1", "a2", "a3", "a4"]
         self.func_dict = {}
 
     def create_lmfit_curve_fit(self, cell_name: str, plot_name: str, func_class,
@@ -34,31 +33,15 @@ class LMFit:
         :param bool switch_axes: if true the axes will be inverted
         :return -> pd.DataFrames: the parameters and their values will be shown
         """
-        df_n = pd.DataFrame(index=self.letter[:func_class.n_params], columns=["1", "2", "3", "4", "5"]).fillna(0)
+        letters = ["a1", "a2", "a3", "a4"]
+        df_n = pd.DataFrame(index=letters[:func_class.n_params], columns=["1", "2", "3", "4", "5"]).fillna(0)
         if name_to_save not in self.func_dict:
             self.func_dict[name_to_save] = dict()
         self.func_dict[name_to_save][cell_name] = dict()
         for spike in range(5):
             string = f"{spike + 1}.spike"
-            if do_all:
-                df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, do_all=do_all)
-            else:
-                df = self.data_class.create_frame(cell_name=cell_name, spike=string, y=False, do_all=do_all)
-
-            if log:
-                if switch_axes:
-                    data = np.log10(df["relative firing time"])
-                    x = np.log10(df["IF"])
-                else:
-                    x = np.log10(df["relative firing time"])
-                    data = np.log10(df["IF"])
-            else:
-                if switch_axes:
-                    data = np.array(df["relative firing time"])
-                    x = np.array(df["IF"])
-                else:
-                    x = np.array(df["relative firing time"])
-                    data = np.array(df["IF"])
+            x, data = self.data_class.define_axes(cell_name=cell_name, string=string,
+                                                  do_all=do_all, log=log, switch_axes=switch_axes)
 
             result = self.fit_the_function(func_class=func_class, param_values=param_values, x=x, data=data)
             final = func_class(params=result.params, x=np.linspace(np.min(x), np.max(x), 201))
@@ -76,7 +59,6 @@ class LMFit:
                 else:
                     self.plotter.plot_fitted_data(x=x, data=data, final=final, log=log,
                                                   spike=spike, plot_name=plot_name)
-
             else:
                 pass
         if show:

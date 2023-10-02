@@ -46,10 +46,10 @@ class Evaluate:
             mean = np.mean(df["IF"])
             r_2 = (np.sum((mean-df["IF"]) ** 2) - np.sum((df["IF"] - final) ** 2)) / np.sum((mean-df["IF"]) ** 2)
             p, r_square, conf_int = self.linear_regression(x=df["relative firing time"], y=df["IF"])
-            self.linear_regression_parameters[cell_name][spike_name][10 ** num]["p"] = p
-            self.linear_regression_parameters[cell_name][spike_name][10 ** num]["r_square"] = r_square
-            self.linear_regression_parameters[cell_name][spike_name][10 ** num]["conf_int"] = conf_int
-            self.linear_regression_parameters[cell_name][spike_name][10 ** num]["r_2"] = r_2
+            self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["p"] = p
+            self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["r_square"] = r_square
+            self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["conf_int"] = conf_int
+            self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["r_2"] = r_2
 
     @staticmethod
     def linear_regression(x, y):
