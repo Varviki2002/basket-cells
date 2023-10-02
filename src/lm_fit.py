@@ -48,6 +48,8 @@ class LMFit:
             if cell_name not in self.coeff:
                 self.coeff[cell_name] = dict()
             self.coeff[cell_name][string] = list(result.params.valuesdict().values())
+            r_2 = 1 - result.residual.var() / np.var(data)
+            self.coeff[cell_name][string].append(r_2)
             final = func_class(params=result.params, x=np.linspace(np.min(x), np.max(x), 201))
 
             # self.func_dict[name_to_save][cell_name][string] = None
