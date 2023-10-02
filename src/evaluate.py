@@ -45,7 +45,7 @@ class Evaluate:
             final = func_class(params=result.params, x=df["relative firing time"])
             mean = np.mean(df["IF"])
             r_2 = (np.sum((mean-df["IF"]) ** 2) - np.sum((df["IF"] - final) ** 2)) / np.sum((mean-df["IF"]) ** 2)
-            p, r_square, conf_int, fp, f = self.linear_regression(x=df["relative firing time"], y=df["IF"])
+            p, r_square, conf_int, fp, f, params = self.linear_regression(x=df["relative firing time"], y=df["IF"])
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["p"] = p
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["r_square"] = r_square
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["conf_int"] = conf_int
@@ -53,19 +53,20 @@ class Evaluate:
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["fp"] = fp
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["f"] = f
 
-            self.plotter.different_if_plotter(df=df, p=p)
+            self.plotter.different_if_plotter(df=df, p=params)
 
     @staticmethod
     def linear_regression(x, y):
         x = sm.add_constant(x)
         model = sm.OLS(y, x)
         result = model.fit()
+        params = result.params
         p = result.pvalues
         r_square = result.rsquared
         conf_int = result.conf_int(alpha=0.05, cols=None)
         fp = result.f_pvalue
         f = result.fvalue
-        return p, r_square, conf_int, fp, f
+        return p, r_square, conf_int, fp, f, params
 
     def compare_values_to_original(self):
         pass
