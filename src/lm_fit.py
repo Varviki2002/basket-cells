@@ -91,7 +91,7 @@ class LMFit:
         return parameters
 
     @staticmethod
-    def show_the_fit_results(self, df: pd.DataFrame, num_params: int, result, spike: int) -> pd.DataFrame:
+    def show_the_fit_results(df: pd.DataFrame, num_params: int, result, spike: int) -> pd.DataFrame:
         letters = ["a1", "a2", "a3", "a4"]
         for i in range(num_params):
             string = f"a{i + 1}_param"
