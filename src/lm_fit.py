@@ -87,7 +87,8 @@ class LMFit:
         return parameters
 
     def show_the_fit_results(self, df: pd.DataFrame, num_params: int, result, spike: int) -> pd.DataFrame:
+        letters = ["a1", "a2", "a3", "a4"]
         for i in range(num_params):
             string = f"a{i + 1}_param"
-            df.loc[self.letter[i], str(spike + 1)] = result.params.valuesdict()[string]
+            df.loc[letters[i], str(spike + 1)] = result.params.valuesdict()[string]
         return df
