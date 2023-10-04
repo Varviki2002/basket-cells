@@ -46,7 +46,7 @@ class Evaluate:
             r_2 = (np.sum((mean-df["IF"]) ** 2) - np.sum((df["IF"] - final) ** 2)) / np.sum((mean-df["IF"]) ** 2)
             p, r_square, conf_int, fp, f, params, chisqr = self.linear_regression(x=df["relative firing time"], y=df["IF"])
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["p"] = p
-            self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["chisqr"] = chisqr
+            # self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["chisqr"] = chisqr
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["r_square"] = r_square
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["conf_int"] = conf_int
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["r_2"] = r_2
@@ -67,7 +67,7 @@ class Evaluate:
         conf_int = result.conf_int(alpha=0.05, cols=None)
         fp = result.f_pvalue
         f = result.fvalue
-        chisqr = result.chisqr
+        # chisqr = result.chisqr
         return p, r_square, conf_int, fp, f, params, chisqr
 
     def compare_values_to_original(self):
