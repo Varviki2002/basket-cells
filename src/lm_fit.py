@@ -47,6 +47,7 @@ class LMFit:
                                                   do_all=do_all, log=log, switch_axes=switch_axes)
 
             result = self.fit_the_function(func_class=func_class, param_values=param_values, x=x, data=data)
+            print(type(result))
             if cell_name not in self.coeff:
                 self.coeff[cell_name] = dict()
             self.coeff[cell_name][string] = dict()
