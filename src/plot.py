@@ -89,7 +89,6 @@ class Plotter:
     def different_if_plotter(df, p, ax, num):
         ax[num].scatter(df["relative firing time"], df["IF"])
         ax[num].plot(df["relative firing time"], p[0] + p[1]*df["relative firing time"])
-        plt.show()
 
     @staticmethod
     def plot_errors(dictionary: dict, threshold: list, what_to_plot: str, cell_name, spike_name):
