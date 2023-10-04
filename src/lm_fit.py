@@ -55,7 +55,7 @@ class LMFit:
             self.coeff[cell_name][string][name_to_save]["params"] = list(result.params.valuesdict().values())
             r_2 = 1 - result.residual.var() / np.var(data)
             self.coeff[cell_name][string][name_to_save]["r_2"] = r_2
-            self.coeff[cell_name][string][name_to_save]["uvars"] = result.uvars
+            self.coeff[cell_name][string][name_to_save]["uvars"] = result.uvars()
             self.coeff[cell_name][string][name_to_save]["aic"] = result.aic
             self.coeff[cell_name][string][name_to_save]["bic"] = result.bic
             final = func_class(params=result.params, x=np.linspace(np.min(x), np.max(x), 201))
