@@ -25,11 +25,10 @@ class Evaluate:
         self.linear_regression_parameters = dict()
         self.plotter = plotter
 
-    def count_if_threshold(self, cell_name, spike_name, func_class, param_values):
+    def count_if_threshold(self, cell_name, spike_name, func_class, param_values, threshold):
         if cell_name not in self.linear_regression_parameters:
             self.linear_regression_parameters[cell_name] = dict()
         self.linear_regression_parameters[cell_name][spike_name] = dict()
-        threshold = [50, 70, 90, 110, 130, 150, 170, 190]
         threshold = np.log10(threshold)
         dict_frame = np.log10(self.data_class.create_frame(cell_name=cell_name, spike=spike_name,
                                                            y=False, do_all=False))
@@ -54,6 +53,7 @@ class Evaluate:
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["f"] = f
 
             self.plotter.different_if_plotter(df=df, p=params)
+
 
     @staticmethod
     def linear_regression(x, y):

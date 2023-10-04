@@ -2,6 +2,8 @@ from lmfit import Minimizer, Parameters
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.metrics import r2_score
+
 
 from src.datamanipulator import DataManipulator
 from src.plot import Plotter
@@ -47,10 +49,19 @@ class LMFit:
             result = self.fit_the_function(func_class=func_class, param_values=param_values, x=x, data=data)
             if cell_name not in self.coeff:
                 self.coeff[cell_name] = dict()
-            self.coeff[cell_name][string] = list(result.params.valuesdict().values())
+            self.coeff[cell_name][string] = dict()
+            self.coeff[cell_name][string][name_to_save] = dict()
+            self.coeff[cell_name][string][name_to_save]["params"] = list(result.params.valuesdict().values())
             r_2 = 1 - result.residual.var() / np.var(data)
-            self.coeff[cell_name][string].append(r_2)
+            self.coeff[cell_name][string][name_to_save]["r_2"] = r_2
+            self.coeff[cell_name][string][name_to_save]["uvars"] = result.uvars
+            self.coeff[cell_name][string][name_to_save]["aic"] = result.aic
+            self.coeff[cell_name][string][name_to_save]["bic"] = result.bic
             final = func_class(params=result.params, x=np.linspace(np.min(x), np.max(x), 201))
+
+            self.coeff[cell_name][string][name_to_save]["r_2_sklearn"] = r2_score(y_true=data,
+                                                                                  y_pred=func_class(params=result.params,
+                                                                                                    x=x))
 
             # self.func_dict[name_to_save][cell_name][string] = None
             self.func_dict[name_to_save][cell_name][string] = func_class(params=result.params, x=x)

@@ -93,3 +93,11 @@ class Plotter:
         plt.ylabel("IF")
         plt.show()
 
+    @staticmethod
+    def plot_errors(dictionary: dict, threshold: list, what_to_plot: str, cell_name, spike_name):
+        arang = np.arange(1, len(threshold)+1, 1)
+        for i, num in enumerate(threshold):
+            plt.plot(arang[i], dictionary[cell_name][spike_name][round(10 ** num)][what_to_plot], "o")
+        plt.show()
+
+
