@@ -40,22 +40,24 @@ class LMFit:
         df_n = pd.DataFrame(index=letters[:func_class.n_params], columns=["1", "2", "3", "4", "5"]).fillna(0)
         if name_to_save not in self.func_dict:
             self.func_dict[name_to_save] = dict()
-        self.func_dict[name_to_save][cell_name] = dict()
+        if cell_name not in self.func_dict[name_to_save]:
+            self.func_dict[name_to_save][cell_name] = dict()
+        if cell_name not in self.coeff:
+            self.coeff[cell_name] = dict()
+
         for spike in range(5):
             string = f"{spike + 1}.spike"
             x, data = self.data_class.define_axes(cell_name=cell_name, string=string,
                                                   do_all=do_all, log=log, switch_axes=switch_axes)
 
             result = self.fit_the_function(func_class=func_class, param_values=param_values, x=x, data=data)
-            print(type(result))
-            if cell_name not in self.coeff:
-                self.coeff[cell_name] = dict()
-            self.coeff[cell_name][string] = dict()
+            if string not in self.coeff[cell_name]:
+                self.coeff[cell_name][string] = dict()
             self.coeff[cell_name][string][name_to_save] = dict()
             self.coeff[cell_name][string][name_to_save]["params"] = list(result.params.valuesdict().values())
             r_2 = 1 - result.residual.var() / np.var(data)
             self.coeff[cell_name][string][name_to_save]["r_2"] = r_2
-            #self.coeff[cell_name][string][name_to_save]["uvars"] = result.uvars
+            # self.coeff[cell_name][string][name_to_save]["uvars"] = result.uvars
             self.coeff[cell_name][string][name_to_save]["aic"] = result.aic
             self.coeff[cell_name][string][name_to_save]["bic"] = result.bic
             final = func_class(params=result.params, x=np.linspace(np.min(x), np.max(x), 201))
