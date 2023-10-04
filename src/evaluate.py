@@ -52,7 +52,7 @@ class Evaluate:
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["fp"] = fp
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["f"] = f
 
-            self.plotter.different_if_plotter(df=df, p=params, ax=ax, num=item+1)
+            self.plotter.different_if_plotter(df=df, p=params, ax=ax, num=item)
 
 
     @staticmethod

@@ -89,8 +89,6 @@ class Plotter:
     def different_if_plotter(df, p, ax, num):
         ax[num].scatter(df["relative firing time"], df["IF"])
         ax[num].plot(df["relative firing time"], p[0] + p[1]*df["relative firing time"])
-        ax[num].xlabel("relative firing time")
-        ax[num].ylabel("IF")
         plt.show()
 
     @staticmethod
