@@ -70,8 +70,8 @@ class Plotter:
 
     @staticmethod
     def plot_fitted_data(x, data, final, log, spike, plot_name, range_spike):
-        colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(len(range_spike))]
-        function_colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(len(range_spike))]
+        colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(range_spike)]
+        function_colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(range_spike)]
         if log:
             plt.xscale('log')
             plt.yscale('log')
