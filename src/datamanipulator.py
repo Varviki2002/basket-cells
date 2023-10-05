@@ -15,11 +15,11 @@ class DataManipulator:
         {"the name of the cells":{"the number of the spike":{"relative firing-time:[], "IF":[]}}}
         """
         self.data = data
+        self.names = [x[0] for x in self.data.columns][::2]
         self.dict = {}
         self.all_in_one_dict = {}
         self.choose_cells = {}
         self.__create_dict()
-        self.names = [x[0] for x in self.data.columns][::2]
 
     def all_in_one_dict_creating(self, gbz_dict, chosen_cells: list) -> dict:
         spike = 1
@@ -58,7 +58,7 @@ class DataManipulator:
         This method creates a dictionary from the data.
         :return None
         """
-        self.all_in_one_dict_creating(gbz_dict=self.all_in_one_dict, chosen_cells=[x[0] for x in self.data.columns][::2])
+        self.all_in_one_dict_creating(gbz_dict=self.all_in_one_dict, chosen_cells=self.names)
         self.create_cell_dict(gbz_dict=self.dict)
 
     def create_frame(self, cell_name: str, spike: str, y: bool, do_all: bool, choose_cells, chosen_cells) -> pd.DataFrame:
