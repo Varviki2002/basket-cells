@@ -147,7 +147,8 @@ class LMFit:
     def show_the_param_results(self, df: pd.DataFrame, num_params: int, name_to_save, range_spike, do_all, cell_name) -> pd.DataFrame:
         keys = ["r_2", "aic", "bic", "squared_diff"]
         for i in range(num_params):
+            string = f"{i + 1}.spike"
             if do_all:
-                df.loc[keys[i], i + 1] = self.coeff[name_to_save][f"{i + 1}.spike"][keys[i]]
-            df.loc[keys[i], i + 1] = self.coeff[name_to_save][cell_name][f"{i + 1}.spike"][keys[i]]
+                df.loc[keys[i], i + 1] = self.coeff[name_to_save][string][keys[i]]
+            df.loc[keys[i], i + 1] = self.coeff[name_to_save][cell_name][string][keys[i]]
         return df
