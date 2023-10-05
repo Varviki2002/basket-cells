@@ -104,11 +104,11 @@ class LMFit:
                 # plot results
                 if log:
                     self.plotter.plot_fitted_data(x=x, data=data, final=final, log=log,
-                                                  spike=spike, plot_name=plot_name)
+                                                  spike=spike, plot_name=plot_name, range_spike=range_spike)
 
                 else:
                     self.plotter.plot_fitted_data(x=x, data=data, final=final, log=log,
-                                                  spike=spike, plot_name=plot_name)
+                                                  spike=spike, plot_name=plot_name, range_spike=range_spike)
             else:
                 pass
         if show:
