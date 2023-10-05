@@ -116,7 +116,7 @@ class LMFit:
             df_params.to_excel("../data/cell_name_df_params.xlsx", index=False)
         if show:
             print(df_params)
-            return df_n, result
+            return df_n
 
     def fit_the_function(self, func_class, param_values, x, data):
 
