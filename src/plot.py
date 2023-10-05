@@ -70,8 +70,8 @@ class Plotter:
 
     @staticmethod
     def plot_fitted_data(x, data, final, log, spike, plot_name):
-        colors = ["r", "b", "g", "mediumpurple", "gold"]
-        function_colors = ["maroon", "midnightblue", "darkgreen", "darkmagenta", "darkorange"]
+        colors = ["r", "b", "g", "mediumpurple", "gold", "r", "b", "g", "mediumpurple", "gold"]
+        function_colors = ["maroon", "midnightblue", "darkgreen", "darkmagenta", "darkorange", "maroon", "midnightblue", "darkgreen", "darkmagenta", "darkorange"]
         if log:
             plt.xscale('log')
             plt.yscale('log')
