@@ -100,17 +100,19 @@ class LMFit:
                 df_n = self.show_the_fit_results(df=df_n, num_params=func_class.n_params, result=result, spike=spike)
                 df_params = self.show_the_param_results(df=df_params, num_params=func_class.n_params,
                                                         name_to_save=name_to_save, range_spike=range_spike,
-                                                        do_all=do_all, cell_name=cell_name)
+                                                        do_all=do_all, cell_name=cell_name, spike=spike)
                 # plot results
                 if log:
                     self.plotter.plot_fitted_data(x=x, data=data, final=final, log=log,
                                                   spike=spike, plot_name=plot_name)
+                    print(df_params)
 
                 else:
                     self.plotter.plot_fitted_data(x=x, data=data, final=final, log=log,
                                                   spike=spike, plot_name=plot_name)
+                    print(df_params)
             else:
-                pass
+                print(df_params)
         if show:
             return df_n
 
@@ -144,11 +146,11 @@ class LMFit:
             df.loc[letters[i], spike + 1] = result.params.valuesdict()[string]
         return df
 
-    def show_the_param_results(self, df: pd.DataFrame, num_params: int, name_to_save, range_spike, do_all, cell_name) -> pd.DataFrame:
+    def show_the_param_results(self, df: pd.DataFrame, num_params: int, name_to_save, range_spike, do_all, cell_name, spike) -> pd.DataFrame:
         keys = ["r_2", "aic", "bic", "squared_diff"]
-        for i in range(num_params):
-            string = f"{i + 1}.spike"
+        string = f"{spike + 1}.spike"
+        for item in keys:
             if do_all:
-                df.loc[keys[i], i + 1] = self.coeff[name_to_save][string][keys[i]]
-            df.loc[keys[i], i + 1] = self.coeff[name_to_save][cell_name][string][keys[i]]
+                df.loc[item, spike + 1] = self.coeff[name_to_save][string][item]
+            df.loc[item, spike + 1] = self.coeff[name_to_save][cell_name][string][item]
         return df
