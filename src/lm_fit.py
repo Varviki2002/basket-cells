@@ -45,7 +45,7 @@ class LMFit:
 
         if name_to_save not in self.func_dict:
             self.func_dict[name_to_save] = dict()
-        if not do_all or not choose_cells:
+        if not do_all and not choose_cells:
             if cell_name not in self.func_dict[name_to_save]:
                 self.func_dict[name_to_save][cell_name] = dict()
 
@@ -62,7 +62,7 @@ class LMFit:
 
             final = func_class(params=result.params, x=np.linspace(np.min(x), np.max(x), 201))
 
-            if not do_all or not choose_cells:
+            if not do_all and not choose_cells:
                 self.func_dict[name_to_save][cell_name][string] = func_class(params=result.params, x=x)
             else:
                 self.func_dict[name_to_save][string] = func_class(params=result.params, x=x)
@@ -72,7 +72,7 @@ class LMFit:
                     ((10 ** data) - (10 ** func_class(params=result.params, x=x))) ** 2 / len(data))
             else:
                 squared_difference = np.sum((data - func_class(params=result.params, x=x)) ** 2 / len(data))
-            if not do_all or not choose_cells:
+            if not do_all and not choose_cells:
                 if cell_name not in self.coeff[name_to_save]:
                     self.coeff[name_to_save][cell_name] = dict()
                 if string not in self.coeff[name_to_save][cell_name]:
@@ -85,8 +85,7 @@ class LMFit:
                                                                                           params=result.params,
                                                                                           x=x))
             else:
-                if string not in self.coeff[name_to_save]:
-                    self.coeff[name_to_save][string] = dict()
+                self.coeff[name_to_save][string] = dict()
                 self.coeff[name_to_save][string]["params"] = list(result.params.valuesdict().values())
                 self.coeff[name_to_save][string]["aic"] = result.aic
                 self.coeff[name_to_save][string]["bic"] = result.bic
