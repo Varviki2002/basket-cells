@@ -94,10 +94,10 @@ class LMFit:
                     params=result.params,
                     x=x))
 
-                df_n = self.show_the_fit_results(df=df_n, num_params=func_class.n_params, result=result, spike=spike)
-                df_params = self.show_the_param_results(df=df_params, num_params=func_class.n_params,
-                                                        name_to_save=name_to_save, range_spike=range_spike,
-                                                        do_all=do_all, cell_name=cell_name, spike=spike)
+            df_n = self.show_the_fit_results(df=df_n, num_params=func_class.n_params, result=result, spike=spike)
+            df_params = self.show_the_param_results(df=df_params, num_params=func_class.n_params,
+                                                    name_to_save=name_to_save, range_spike=range_spike,
+                                                    do_all=do_all, cell_name=cell_name, spike=spike)
 
             if show:
                 # report_fit(result)
