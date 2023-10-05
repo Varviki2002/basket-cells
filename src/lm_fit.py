@@ -85,7 +85,8 @@ class LMFit:
                                                                                           params=result.params,
                                                                                           x=x))
             else:
-                self.coeff[name_to_save][string] = dict()
+                if string not in self.coeff[name_to_save]:
+                    self.coeff[name_to_save][string] = dict()
                 self.coeff[name_to_save][string]["params"] = list(result.params.valuesdict().values())
                 self.coeff[name_to_save][string]["aic"] = result.aic
                 self.coeff[name_to_save][string]["bic"] = result.bic
