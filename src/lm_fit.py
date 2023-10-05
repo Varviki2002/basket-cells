@@ -22,7 +22,7 @@ class LMFit:
     def create_lmfit_curve_fit(self, cell_name: str, plot_name: str, func_class,
                                do_all: bool, chosen_cells: list, choose_cells: bool, show: bool, switch_axes: bool,
                                name_to_save: str, param_values: tuple, log: bool, range_spike: int,
-                               save: bool) -> pd.DataFrame:
+                               save: bool):
         """
         This method makes the curve fitting to the points of the given spike's cells.
         :param choose_cells:
@@ -116,8 +116,7 @@ class LMFit:
             df_params.to_excel("../data/cell_name_df_params.xlsx", index=False)
         if show:
             print(df_params)
-            print(vars(result))
-            return df_n
+            return df_n, result
 
     def fit_the_function(self, func_class, param_values, x, data):
 
