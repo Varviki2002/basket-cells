@@ -151,5 +151,6 @@ class LMFit:
         for item in keys:
             if do_all:
                 df.loc[item, spike + 1] = self.coeff[name_to_save][string][item]
-            df.loc[item, spike + 1] = self.coeff[name_to_save][cell_name][string][item]
+            else:
+                df.loc[item, spike + 1] = self.coeff[name_to_save][cell_name][string][item]
         return df
