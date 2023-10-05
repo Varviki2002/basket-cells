@@ -53,7 +53,7 @@ class LMFit:
         if cell_name not in self.coeff:
             self.coeff[name_to_save] = dict()
 
-        for spike in range(range_spike):
+        for spike in range(0, range_spike):
             string = f"{spike + 1}.spike"
             x, data = self.data_class.define_axes(cell_name=cell_name, string=string,
                                                   do_all=do_all, choose_cells=choose_cells, chosen_cells=chosen_cells,
@@ -76,7 +76,8 @@ class LMFit:
             if not do_all or not choose_cells:
                 if cell_name not in self.coeff[name_to_save]:
                     self.coeff[name_to_save][cell_name] = dict()
-                self.coeff[name_to_save][cell_name][string] = dict()
+                if string not in self.coeff[name_to_save][cell_name]:
+                    self.coeff[name_to_save][cell_name][string] = dict()
                 self.coeff[name_to_save][cell_name][string]["params"] = list(result.params.valuesdict().values())
                 self.coeff[name_to_save][cell_name][string]["aic"] = result.aic
                 self.coeff[name_to_save][cell_name][string]["bic"] = result.bic
@@ -146,8 +147,7 @@ class LMFit:
     def show_the_param_results(self, df: pd.DataFrame, num_params: int, name_to_save, range_spike, do_all, cell_name) -> pd.DataFrame:
         keys = ["r_2", "aic", "bic", "squared_diff"]
         for i in range(num_params):
-            for j in range(range_spike):
-                if do_all:
-                    df.loc[keys[i], j + 1] = self.coeff[name_to_save][f"{i + 1}.spike"][keys[i]]
-                df.loc[keys[i], j + 1] = self.coeff[name_to_save][cell_name][f"{i + 1}.spike"][keys[i]]
+            if do_all:
+                df.loc[keys[i], i + 1] = self.coeff[name_to_save][f"{i + 1}.spike"][keys[i]]
+            df.loc[keys[i], i + 1] = self.coeff[name_to_save][cell_name][f"{i + 1}.spike"][keys[i]]
         return df
