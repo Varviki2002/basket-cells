@@ -113,7 +113,7 @@ class LMFit:
                 pass
         if save:
             df_n.to_excel("../generated/cell_name_df_n.xlsx", index=False)
-            df_params.to_excel("../generated/cell_name_df_params.xlsx", index=False)
+            df_params.to_excel("../data/cell_name_df_params.xlsx", index=False)
         if show:
             print(df_params)
             print(vars(result))
