@@ -69,9 +69,9 @@ class Plotter:
             self.plot_spike(name=cell_name, spike_name=spike, color=color[i - 1], all=False)
 
     @staticmethod
-    def plot_fitted_data(x, data, final, log, spike, plot_name):
-        colors = ["r", "b", "g", "mediumpurple", "gold", "r", "b", "g", "mediumpurple", "gold"]
-        function_colors = ["maroon", "midnightblue", "darkgreen", "darkmagenta", "darkorange", "maroon", "midnightblue", "darkgreen", "darkmagenta", "darkorange"]
+    def plot_fitted_data(x, data, final, log, spike, plot_name, range_spike):
+        colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(len(range_spike))]
+        function_colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(len(range_spike))]
         if log:
             plt.xscale('log')
             plt.yscale('log')
@@ -82,7 +82,7 @@ class Plotter:
             plt.title(plot_name)
         else:
             plt.plot(x, data, 'o', c=colors[spike])
-            plt.plot(np.linspace(np.min(x), np.max(x), 201), final, 'r', c=function_colors[spike])
+            plt.plot(np.linspace(np.min(x), np.max(x), 201), final, 'r', c=colors[spike])
             plt.title(plot_name)
             # plt.show()
 

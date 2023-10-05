@@ -105,7 +105,6 @@ class LMFit:
                 if log:
                     self.plotter.plot_fitted_data(x=x, data=data, final=final, log=log,
                                                   spike=spike, plot_name=plot_name)
-                    print(df_params)
 
                 else:
                     self.plotter.plot_fitted_data(x=x, data=data, final=final, log=log,
