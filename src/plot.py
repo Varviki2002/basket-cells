@@ -79,7 +79,7 @@ class Plotter:
             plt.plot(10 ** x, 10 ** data, 'o', c=colors[spike])
             plt.plot(10 ** np.linspace(np.min(x), np.max(x), 201),
                      10 ** final,
-                     'r', c=function_colors[spike])
+                     'r', c=colors[spike])
             plt.title(plot_name)
         else:
             plt.plot(x, data, 'o', c=colors[spike])
