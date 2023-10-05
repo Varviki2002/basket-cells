@@ -78,15 +78,15 @@ class LMFit:
             if not do_all or not choose_cells:
                 self.coeff[name_to_save][cell_name][string] = dict()
                 self.coeff[name_to_save][cell_name][string]["params"] = list(result.params.valuesdict().values())
-                self.coeff[cell_name][string][name_to_save]["aic"] = result.aic
-                self.coeff[cell_name][string][name_to_save]["bic"] = result.bic
-                self.coeff[cell_name][string][name_to_save]["squared_diff"] = squared_difference
+                self.coeff[name_to_save][cell_name][string]["aic"] = result.aic
+                self.coeff[name_to_save][cell_name][string]["bic"] = result.bic
+                self.coeff[name_to_save][cell_name][string]["squared_diff"] = squared_difference
             else:
                 self.coeff[name_to_save][string] = dict()
                 self.coeff[name_to_save][string]["params"] = list(result.params.valuesdict().values())
-                self.coeff[cell_name][name_to_save]["aic"] = result.aic
-                self.coeff[cell_name][name_to_save]["bic"] = result.bic
-                self.coeff[cell_name][name_to_save]["squared_diff"] = squared_difference
+                self.coeff[name_to_save][string]["aic"] = result.aic
+                self.coeff[name_to_save][string]["bic"] = result.bic
+                self.coeff[name_to_save][string]["squared_diff"] = squared_difference
 
             if show:
                 # report_fit(result)
