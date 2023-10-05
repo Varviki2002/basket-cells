@@ -74,7 +74,7 @@ class LMFit:
             else:
                 squared_difference = np.sum((data - func_class(params=result.params, x=x)) ** 2 / len(data))
             if string not in self.coeff[name_to_save]:
-                self.coeff[cell_name][string] = dict()
+                self.coeff[name_to_save][string] = dict()
             if not do_all or not choose_cells:
                 self.coeff[name_to_save][cell_name][string] = dict()
                 self.coeff[name_to_save][cell_name][string]["params"] = list(result.params.valuesdict().values())
