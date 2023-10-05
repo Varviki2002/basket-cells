@@ -111,8 +111,12 @@ class LMFit:
                                                   spike=spike, plot_name=plot_name, range_spike=range_spike)
             else:
                 pass
+        if save:
+            df_n.to_excel("../generated/cell_name_df_n.xlsx", index=False)
+            df_params.to_excel("../generated/cell_name_df_params.xlsx", index=False)
         if show:
             print(df_params)
+            print(vars(result))
             return df_n
 
     def fit_the_function(self, func_class, param_values, x, data):
