@@ -41,8 +41,7 @@ class LMFit:
         """
         letters = ["a1", "a2", "a3", "a4"]
         df_n = pd.DataFrame(index=letters[:func_class.n_params], columns=[i + 1 for i in range(range_spike)]).fillna(0)
-        df_params = pd.DataFrame(index=letters[:func_class.n_params],
-                                 columns=[i + 1 for i in range(range_spike)]).fillna(0)
+        df_params = pd.DataFrame(columns=[i + 1 for i in range(range_spike)]).fillna(0)
 
         if name_to_save not in self.func_dict:
             self.func_dict[name_to_save] = dict()
@@ -110,9 +109,9 @@ class LMFit:
                 else:
                     self.plotter.plot_fitted_data(x=x, data=data, final=final, log=log,
                                                   spike=spike, plot_name=plot_name)
-                    print(df_params)
             else:
-                print(df_params)
+                pass
+        print(df_params)
         if show:
             return df_n
 
