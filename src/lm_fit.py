@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.metrics import r2_score
 
-
 from src.datamanipulator import DataManipulator
 from src.plot import Plotter
 
@@ -21,10 +20,14 @@ class LMFit:
         self.coeff = dict()
 
     def create_lmfit_curve_fit(self, cell_name: str, plot_name: str, func_class,
-                               do_all: bool, show: bool, switch_axes: bool, name_to_save: str,
-                               param_values: tuple, log: bool) -> pd.DataFrame:
+                               do_all: bool, chosen_cells: list, choose_cells: bool, show: bool, switch_axes: bool,
+                               name_to_save: str, param_values: tuple, log: bool, range_spike: int,
+                               save: bool) -> pd.DataFrame:
         """
         This method makes the curve fitting to the points of the given spike's cells.
+        :param choose_cells:
+        :param range_spike:
+        :param chosen_cells:
         :param log:
         :param param_values:
         :param name_to_save:
@@ -37,45 +40,64 @@ class LMFit:
         :return -> pd.DataFrames: the parameters and their values will be shown
         """
         letters = ["a1", "a2", "a3", "a4"]
-        df_n = pd.DataFrame(index=letters[:func_class.n_params], columns=["1", "2", "3", "4", "5"]).fillna(0)
+        df_n = pd.DataFrame(index=letters[:func_class.n_params], columns=[i + 1 for i in range(range_spike)]).fillna(0)
+        df_params = pd.DataFrame(index=letters[:func_class.n_params],
+                                 columns=[i + 1 for i in range(range_spike)]).fillna(0)
+
         if name_to_save not in self.func_dict:
             self.func_dict[name_to_save] = dict()
-        if cell_name not in self.func_dict[name_to_save]:
-            self.func_dict[name_to_save][cell_name] = dict()
-        if cell_name not in self.coeff:
-            self.coeff[cell_name] = dict()
+        if not do_all or not choose_cells:
+            if cell_name not in self.func_dict[name_to_save]:
+                self.func_dict[name_to_save][cell_name] = dict()
 
-        for spike in range(5):
+        if cell_name not in self.coeff:
+            self.coeff[name_to_save] = dict()
+
+        for spike in range(range_spike):
             string = f"{spike + 1}.spike"
             x, data = self.data_class.define_axes(cell_name=cell_name, string=string,
-                                                  do_all=do_all, log=log, switch_axes=switch_axes)
+                                                  do_all=do_all, choose_cells=choose_cells, chosen_cells=chosen_cells,
+                                                  log=log, switch_axes=switch_axes)
 
             result = self.fit_the_function(func_class=func_class, param_values=param_values, x=x, data=data)
-            if string not in self.coeff[cell_name]:
-                self.coeff[cell_name][string] = dict()
-            self.coeff[cell_name][string][name_to_save] = dict()
-            self.coeff[cell_name][string][name_to_save]["params"] = list(result.params.valuesdict().values())
-            r_2 = 1 - result.residual.var() / np.var(data)
-            self.coeff[cell_name][string][name_to_save]["r_2"] = r_2
-            # self.coeff[cell_name][string][name_to_save]["uvars"] = result.uvars
-            self.coeff[cell_name][string][name_to_save]["aic"] = result.aic
-            self.coeff[cell_name][string][name_to_save]["bic"] = result.bic
+
             final = func_class(params=result.params, x=np.linspace(np.min(x), np.max(x), 201))
 
-            self.coeff[cell_name][string][name_to_save]["r_2_sklearn"] = r2_score(y_true=data,
-                                                                                  y_pred=func_class(params=result.params,
-                                                                                                    x=x))
+            if not do_all or not choose_cells:
+                self.func_dict[name_to_save][cell_name][string] = func_class(params=result.params, x=x)
+            else:
+                self.func_dict[name_to_save][string] = func_class(params=result.params, x=x)
 
-            # self.func_dict[name_to_save][cell_name][string] = None
-            self.func_dict[name_to_save][cell_name][string] = func_class(params=result.params, x=x)
+            if log:
+                squared_difference = np.sum(
+                    ((10 ** data) - (10 ** func_class(params=result.params, x=x))) ** 2 / len(data))
+            else:
+                squared_difference = np.sum((data - func_class(params=result.params, x=x)) ** 2 / len(data))
+            if string not in self.coeff[name_to_save]:
+                self.coeff[cell_name][string] = dict()
+            if not do_all or not choose_cells:
+                self.coeff[name_to_save][cell_name][string] = dict()
+                self.coeff[name_to_save][cell_name][string]["params"] = list(result.params.valuesdict().values())
+                self.coeff[cell_name][string][name_to_save]["aic"] = result.aic
+                self.coeff[cell_name][string][name_to_save]["bic"] = result.bic
+                self.coeff[cell_name][string][name_to_save]["squared_diff"] = squared_difference
+            else:
+                self.coeff[name_to_save][string] = dict()
+                self.coeff[name_to_save][string]["params"] = list(result.params.valuesdict().values())
+                self.coeff[cell_name][name_to_save]["aic"] = result.aic
+                self.coeff[cell_name][name_to_save]["bic"] = result.bic
+                self.coeff[cell_name][name_to_save]["squared_diff"] = squared_difference
 
             if show:
                 # report_fit(result)
                 df_n = self.show_the_fit_results(df=df_n, num_params=func_class.n_params, result=result, spike=spike)
+                df_params = self.show_the_param_results(df=df_params, num_params=func_class.n_params,
+                                                        name_to_save=name_to_save, range_spike=range_spike)
                 # plot results
                 if log:
                     self.plotter.plot_fitted_data(x=x, data=data, final=final, log=log,
                                                   spike=spike, plot_name=plot_name)
+
                 else:
                     self.plotter.plot_fitted_data(x=x, data=data, final=final, log=log,
                                                   spike=spike, plot_name=plot_name)
@@ -111,5 +133,12 @@ class LMFit:
         letters = ["a1", "a2", "a3", "a4"]
         for i in range(num_params):
             string = f"a{i + 1}_param"
-            df.loc[letters[i], str(spike + 1)] = result.params.valuesdict()[string]
+            df.loc[letters[i], spike + 1] = result.params.valuesdict()[string]
+        return df
+
+    def show_the_param_results(self, df: pd.DataFrame, num_params: int, name_to_save, range_spike) -> pd.DataFrame:
+        keys = ["r_2", "aic", "bic", "squared_diff"]
+        for i in range(num_params):
+            for j in range(range_spike):
+                df.loc[keys[i], j + 1] = self.coeff[name_to_save][f"{i + 1}.spike"][keys[i]]
         return df

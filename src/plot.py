@@ -6,6 +6,21 @@ import numpy as np
 from src.datamanipulator import DataManipulator
 
 
+def plot_frame_spike(name: str, spike_frame: pd.DataFrame, color: str) -> None:
+    """
+    This method plots the spikes
+    :param str name: the title of the plot
+    :param pd.DataFrame spike_frame: the dataframe
+    :param str color: the color of the plot
+    """
+    plt.scatter(spike_frame["relative firing time"], spike_frame["IF"],
+                c=color)
+    plt.title(name)
+    plt.xlabel("relative firing time")
+    plt.ylabel("IF")
+    plt.show()
+
+
 class Plotter:
     """
     This class plots the data.
@@ -53,20 +68,6 @@ class Plotter:
             spike = f"{i}.spike"
             self.plot_spike(name=cell_name, spike_name=spike, color=color[i - 1], all=False)
 
-    def plot_frame_spike(self, name: str, spike_frame: pd.DataFrame, color: str) -> None:
-        """
-        This method plots the spikes
-        :param str name: the title of the plot
-        :param pd.DataFrame spike_frame: the dataframe
-        :param str color: the color of the plot
-        """
-        plt.scatter(spike_frame["relative firing time"], spike_frame["IF"],
-                    c=color)
-        plt.title(name)
-        plt.xlabel("relative firing time")
-        plt.ylabel("IF")
-        plt.show()
-
     @staticmethod
     def plot_fitted_data(x, data, final, log, spike, plot_name):
         colors = ["r", "b", "g", "mediumpurple", "gold"]
@@ -86,9 +87,10 @@ class Plotter:
             # plt.show()
 
     @staticmethod
-    def different_if_plotter(df, p, ax, num):
-        ax[num].scatter(df["relative firing time"], df["IF"])
-        ax[num].plot(df["relative firing time"], p[0] + p[1]*df["relative firing time"])
+    def different_if_plotter(df, p, ax, idx, threshold):
+        ax[idx].scatter(df["relative firing time"], df["IF"])
+        ax[idx].plot(df["relative firing time"], p[0] + p[1]*df["relative firing time"])
+        ax[idx].set_title("Threshold= " + str(threshold))
 
     @staticmethod
     def plot_errors(dictionary: dict, threshold: list, what_to_plot: str, cell_name, spike_name):
