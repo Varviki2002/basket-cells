@@ -111,8 +111,8 @@ class LMFit:
                                                   spike=spike, plot_name=plot_name)
             else:
                 pass
-        print(df_params)
         if show:
+            print(df_params)
             return df_n
 
     def fit_the_function(self, func_class, param_values, x, data):
