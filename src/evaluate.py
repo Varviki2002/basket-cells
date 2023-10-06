@@ -26,7 +26,7 @@ class Evaluate:
         self.plotter = plotter
 
     def count_if_threshold(self, cell_name, spike_name, func_class, param_values, threshold, ax, choose_cells,
-                           chosen_cells):
+                           chosen_cells, save: bool):
         if cell_name not in self.linear_regression_parameters:
             self.linear_regression_parameters[cell_name] = dict()
         self.linear_regression_parameters[cell_name][spike_name] = dict()
@@ -44,9 +44,7 @@ class Evaluate:
                     df = df.drop(labels=i, axis=0)
             result = self.lm_fit.fit_the_function(func_class=func_class, param_values=param_values,
                                                   x=df["relative firing time"], data=df["IF"])
-            # final = func_class(params=result.params, x=df["relative firing time"])
-            final = func_class(params=result.params,
-                               x=np.linspace(np.min(df["relative firing time"]), np.max(df["relative firing time"]), 201))
+            final = func_class(params=result.params, x=df["relative firing time"])
             mean = np.mean(df["IF"])
             r_2 = (np.sum((mean-df["IF"]) ** 2) - np.sum((df["IF"] - final) ** 2)) / np.sum((mean-df["IF"]) ** 2)
             p, r_square, conf_int, fp, f, params = self.linear_regression(x=df["relative firing time"], y=df["IF"])
@@ -59,8 +57,8 @@ class Evaluate:
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["f"] = f
 
             self.plotter.different_if_plotter(df=df, p=params, ax=ax, idx=item, threshold=threshold)
-            self.plotter.plotter_params(cell_name=cell_name, spike_name=spike_name, thresholds=threshold,
-                                        dictionary=self.linear_regression_parameters)
+            # self.plotter.plotter_params(cell_name=cell_name, spike_name=spike_name, thresholds=threshold,
+            #                            dictionary=self.linear_regression_parameters)
 
     @staticmethod
     def linear_regression(x, y):
