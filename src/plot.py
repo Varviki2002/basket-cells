@@ -102,7 +102,7 @@ class Plotter:
 
     @staticmethod
     def plotter_params(cell_name, spike_name, thresholds, dictionary):
-        param = ['r_square', 'fp']
+        param = ['p', 'r_square', 'fp']
         fig, ax = plt.subplots(nrows=1, ncols=len(param), figsize=(50, 6))
         threshold = [round(10 ** i) for i in thresholds]
         for i, key in enumerate(param):
@@ -110,7 +110,7 @@ class Plotter:
             for item in threshold:
                 perm_list.append(dictionary[cell_name][spike_name][item][key])
             ax[i].plot(thresholds, perm_list)
-            ax[i].scatter(list(zip(thresholds, thresholds)) if key == 'p' else thresholds, perm_list)
+            ax[i].scatter(list(zip(thresholds, threshold)) if key == 'p' else threshold, perm_list)
             ax[i].set_title(key)
 
 
