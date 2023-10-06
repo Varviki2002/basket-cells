@@ -56,8 +56,8 @@ class Evaluate:
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["f"] = f
 
             self.plotter.different_if_plotter(df=df, p=params, ax=ax, idx=item, threshold=threshold)
-            # self.plotter.plotter_params(cell_name=cell_name, spike_name=spike_name, thresholds=threshold,
-            #                            dictionary=self.linear_regression_parameters)
+            self.plotter.plotter_params(cell_name=cell_name, spike_name=spike_name, thresholds=threshold,
+                                        dictionary=self.linear_regression_parameters)
 
     @staticmethod
     def linear_regression(x, y):
