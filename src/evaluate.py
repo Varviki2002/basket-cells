@@ -42,8 +42,7 @@ class Evaluate:
             for i in range(0, len(dict_frame)):
                 if dict_frame["IF"].iloc[i] > num:
                     df = df.drop(labels=i, axis=0)
-            result, chisqr = self.lm_fit.fit_the_function(func_class=func_class, param_values=param_values,
-                                                    x=df["relative firing time"], data=df["IF"])
+            result, chisq = self.lm_fit.fit_the_function(func_class=func_class, param_values=param_values, x=df["relative firing time"], data=df["IF"])
             final = func_class(params=result.params, x=df["relative firing time"])
             mean = np.mean(df["IF"])
             r_2 = (np.sum((mean-df["IF"]) ** 2) - np.sum((df["IF"] - final) ** 2)) / np.sum((mean-df["IF"]) ** 2)
