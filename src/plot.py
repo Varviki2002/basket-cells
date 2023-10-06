@@ -102,7 +102,7 @@ class Plotter:
 
     @staticmethod
     def plotter_params(cell_name, spike_name, thresholds, dictionary):
-        param = ['p', 'r_square', 'fp']
+        param = ['r_square', 'fp']
         fig, ax = plt.subplots(nrows=1, ncols=len(param), figsize=(50, 6))
         threshold = [round(10 ** i) for i in thresholds]
         for i, key in enumerate(param):
