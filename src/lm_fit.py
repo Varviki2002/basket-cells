@@ -115,8 +115,8 @@ class LMFit:
             else:
                 pass
         if save:
-            param_name = 'params_' + plot_name + '.xlsx'
-            evaluat = "evaluate" + plot_name + '.xlsx'
+            param_name = 'params_' + plot_name + func_class.n_params + '.xlsx'
+            evaluat = "evaluate" + plot_name + func_class.n_params + '.xlsx'
             file_param = "../generated/" + param_name
             file_eval = "../generated/" + evaluat
             df_n.to_excel(file_param)
