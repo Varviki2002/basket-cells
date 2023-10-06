@@ -113,4 +113,8 @@ class Plotter:
             ax[i].scatter(list(zip(thresholds, threshold)) if key == 'p' else threshold, perm_list)
             ax[i].set_title(key)
 
+        f_name = cell_name + "_" + spike_name + ".png"
+        file_path = "../generated/" + f_name
+        fig.savefig(file_path)
+
 
