@@ -44,7 +44,7 @@ class Evaluate:
                     df = df.drop(labels=i, axis=0)
             result = self.lm_fit.fit_the_function(func_class=func_class, param_values=param_values,
                                                   x=df["relative firing time"], data=df["IF"])
-            final = func_class(params=result.params, x=df["relative firing time"])
+            # final = func_class(params=result.params, x=df["relative firing time"])
             final = func_class(params=result.params,
                                x=np.linspace(np.min(df["relative firing time"]), np.max(df["relative firing time"]), 201))
             mean = np.mean(df["IF"])
