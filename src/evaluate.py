@@ -26,7 +26,7 @@ class Evaluate:
         self.plotter = plotter
 
     def count_if_threshold(self, cell_name, spike_name, func_class, param_values, threshold, ax, choose_cells,
-                           chosen_cells, save: bool):
+                           chosen_cells):
         if cell_name not in self.linear_regression_parameters:
             self.linear_regression_parameters[cell_name] = dict()
         self.linear_regression_parameters[cell_name][spike_name] = dict()
