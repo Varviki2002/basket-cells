@@ -112,10 +112,16 @@ class LMFit:
             else:
                 pass
         if save:
-            df_n.to_excel("../data/cell_name_df_n.xlsx", index=False)
-            df_params.to_excel("../data/cell_name_df_params.xlsx", index=False)
+            filename = 'result_' + plot_name + '.xlsx'
+            file_path = "../generated/" + filename
+            df_n.to_excel(file_path)
+            df_params.to_excel(file_path)
         if show:
-            print(df_params)
+            with pd.option_context('display.max_rows', None,
+                                   'display.max_columns', None,
+                                   'display.precision', 3,
+                                   ):
+                print(df_params)
             return df_n
 
     def fit_the_function(self, func_class, param_values, x, data):

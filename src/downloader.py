@@ -19,6 +19,8 @@ class Downloader:
         if gdrive_id is not None and file_name is not None:
             gdrive_link = "https://drive.google.com/uc?export=download&id="
             data_folder = os.path.join(PROJECT_PATH, "data")
+            data_generated = os.path.join(PROJECT_PATH, "generated")
+            os.makedirs(data_generated, exist_ok=True)
             os.path.join(data_folder, "generated")
             os.makedirs(data_folder, exist_ok=True)
             file = os.path.join(data_folder, file_name)
