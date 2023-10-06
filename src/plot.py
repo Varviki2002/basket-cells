@@ -109,8 +109,8 @@ class Plotter:
             perm_list = []
             for item in threshold:
                 perm_list.append(dictionary[cell_name][spike_name][item][key])
-            ax[i].plot(thresholds, perm_list)
-            ax[i].scatter(list(zip(thresholds, threshold)) if key == 'p' else threshold, perm_list)
+            ax[i].plot(threshold, perm_list)
+            ax[i].scatter(list(zip(threshold, threshold)) if key == 'p' else threshold, perm_list)
             ax[i].set_title(key)
 
         f_name = cell_name + "_" + spike_name + ".png"
