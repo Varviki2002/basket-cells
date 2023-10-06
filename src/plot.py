@@ -100,4 +100,16 @@ class Plotter:
             plt.plot(arang[i], dictionary[cell_name][spike_name][round(10 ** num)][what_to_plot], "o")
         plt.show()
 
+    @staticmethod
+    def plotter_params(cell_name, spike_name, thresholds, dictionary):
+        param = ['r_square', 'fp']
+        fig, ax = plt.subplots(nrows=1, ncols=len(param), figsize=(50, 6))
+        for i, key in enumerate(param):
+            perm_list = []
+            for item in thresholds:
+                perm_list.append(dictionary[cell_name][spike_name][item][key])
+            ax[i].plot(thresholds, perm_list)
+            ax[i].scatter(list(zip(thresholds, thresholds)) if key == 'p' else thresholds, perm_list)
+            ax[i].set_title(key)
+
 

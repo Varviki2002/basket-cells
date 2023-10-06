@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.metrics import r2_score
+from scipy import stats
 
 from src.datamanipulator import DataManipulator
 from src.plot import Plotter
@@ -58,7 +59,7 @@ class LMFit:
                                                   do_all=do_all, choose_cells=choose_cells, chosen_cells=chosen_cells,
                                                   log=log, switch_axes=switch_axes)
 
-            result = self.fit_the_function(func_class=func_class, param_values=param_values, x=x, data=data)
+            result, chi_sqr = self.fit_the_function(func_class=func_class, param_values=param_values, x=x, data=data)
 
             final = func_class(params=result.params, x=np.linspace(np.min(x), np.max(x), 201))
 
@@ -80,6 +81,7 @@ class LMFit:
                 self.coeff[name_to_save][cell_name][string]["params"] = list(result.params.valuesdict().values())
                 self.coeff[name_to_save][cell_name][string]["aic"] = result.aic
                 self.coeff[name_to_save][cell_name][string]["bic"] = result.bic
+                self.coeff[name_to_save][cell_name][string]["p"] = 1 - stats.chi2.cdf(chi_sqr, func_class.n_params)
                 self.coeff[name_to_save][cell_name][string]["squared_diff"] = squared_difference
                 self.coeff[name_to_save][cell_name][string]["r_2"] = r2_score(y_true=data, y_pred=func_class(
                                                                                           params=result.params,
@@ -89,6 +91,7 @@ class LMFit:
                 self.coeff[name_to_save][string]["params"] = list(result.params.valuesdict().values())
                 self.coeff[name_to_save][string]["aic"] = result.aic
                 self.coeff[name_to_save][string]["bic"] = result.bic
+                self.coeff[name_to_save][cell_name][string]["p"] = 1 - stats.chi2.cdf(chi_sqr, func_class.n_params)
                 self.coeff[name_to_save][string]["squared_diff"] = squared_difference
                 self.coeff[name_to_save][string]["r_2"] = r2_score(y_true=data, y_pred=func_class(
                     params=result.params,
@@ -112,10 +115,12 @@ class LMFit:
             else:
                 pass
         if save:
-            filename = 'result_' + plot_name + '.xlsx'
-            file_path = "../generated/" + filename
-            df_n.to_excel(file_path)
-            df_params.to_excel(file_path)
+            param_name = 'params_' + plot_name + '.xlsx'
+            eval = "evaluate" + plot_name + 'xlsx'
+            file_param = "../generated/" + param_name
+            file_eval = "../generated/" + eval
+            df_n.to_excel(file_param)
+            df_params.to_excel(file_eval)
         if show:
             with pd.option_context('display.max_rows', None,
                                    'display.max_columns', None,
@@ -135,8 +140,9 @@ class LMFit:
         # do fit, here with least_squares model
         minner = Minimizer(func_min, params, fcn_args=(x, data))
         result = minner.minimize(method="least_squares")
+        chi_sqr = result.chisqr
 
-        return result
+        return result, chi_sqr
 
     @staticmethod
     def create_parameters(num_params: int, fit_params: tuple) -> Parameters:
