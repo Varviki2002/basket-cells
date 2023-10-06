@@ -27,6 +27,8 @@ class Evaluate:
 
     def count_if_threshold(self, cell_name, spike_name, func_class, param_values, threshold, ax, choose_cells,
                            chosen_cells):
+        if choose_cells:
+            cell_name = "all"
         if cell_name not in self.linear_regression_parameters:
             self.linear_regression_parameters[cell_name] = dict()
         self.linear_regression_parameters[cell_name][spike_name] = dict()
@@ -35,8 +37,6 @@ class Evaluate:
                                                            y=False, do_all=False, choose_cells=choose_cells, chosen_cells=chosen_cells))
 
         for item, num in enumerate(threshold):
-            if choose_cells:
-                cell_name = "all"
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)] = dict()
             df = dict_frame
             for i in range(0, len(dict_frame)):
