@@ -2,7 +2,7 @@ from lmfit import Minimizer, Parameters
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-from sklearn.metrics import r2_score
+from sklearn.metrics import mean_squared_error, r2_score
 from scipy import stats
 
 from src.datamanipulator import DataManipulator
@@ -63,7 +63,7 @@ class LMFit:
 
             final = func_class(params=result.params, x=np.linspace(np.min(x), np.max(x), 201))
 
-            # chi2_stat, p_value = stats.chisquare(data, f_exp=func_class(params=result.params, x=x))
+            chi2_stat = np.sum(result.residual ** 2 / func_class(params=result.params, x=x))
 
             if not do_all and not choose_cells:
                 self.func_dict[name_to_save][cell_name][string] = func_class(params=result.params, x=x)
@@ -86,11 +86,19 @@ class LMFit:
                 self.coeff[name_to_save][cell_name][string]["chi_sqr"] = chi_sqr
                 # self.coeff[name_to_save][cell_name][string]["p_manu"] = stats.chi2.sf(chi_sqr, result.nfree)
                 # self.coeff[name_to_save][cell_name][string]["chi_stat"] = chi2_stat
-                # self.coeff[name_to_save][cell_name][string]["p-value"] = p_value
+                self.coeff[name_to_save][cell_name][string]["p-value"] = 1 - stats.chi2.cdf(chi2_stat, result.nfree)
                 self.coeff[name_to_save][cell_name][string]["squared_diff"] = squared_difference
                 self.coeff[name_to_save][cell_name][string]["r_2"] = r2_score(y_true=data, y_pred=func_class(
                                                                                           params=result.params,
                                                                                           x=x))
+                self.coeff[name_to_save][cell_name][string]["adjusted_r_2"] = 1 - \
+                                                                    (1 - r2_score(y_true=data,
+                                                                                  y_pred=func_class(params=result.params,
+                                                                                                     x=x))) * \
+                                                                     (len(data)-1) / (len(data)-func_class.n_params-1)
+                self.coeff[name_to_save][cell_name][string]["RMSE"] = np.sqrt(mean_squared_error(y_true=data, y_pred=func_class(
+                                                                                        params=result.params, x=x)))
+
             else:
                 self.coeff[name_to_save][string] = dict()
                 self.coeff[name_to_save][string]["params"] = list(result.params.valuesdict().values())
@@ -99,16 +107,24 @@ class LMFit:
                 self.coeff[name_to_save][string]["chi_sqr"] = chi_sqr
                 # self.coeff[name_to_save][string]["p_manu"] = stats.chi2.sf(chi_sqr, result.nfree)
                 # self.coeff[name_to_save][string]["chi_stat"] = chi2_stat
-                # self.coeff[name_to_save][string]["p-value"] = p_value
+                self.coeff[name_to_save][string]["p-value"] = 1 - stats.chi2.cdf(chi2_stat, result.nfree)
                 self.coeff[name_to_save][string]["squared_diff"] = squared_difference
                 self.coeff[name_to_save][string]["r_2"] = r2_score(y_true=data, y_pred=func_class(
                     params=result.params,
                     x=x))
+                self.coeff[name_to_save][string]["adjusted_r_2"] = 1 - \
+                                                                   (1 - r2_score(y_true=data,
+                                                                                 y_pred=func_class(params=result.params,
+                                                                                                   x=x))) * \
+                                                                   (len(data) - 1) / (len(data) - func_class.n_params - 1)
+                self.coeff[name_to_save][string]["RMSE"] = np.sqrt(mean_squared_error(y_true=data, y_pred=func_class(
+                                                                                params=result.params, x=x)))
 
             df_n = self.show_the_fit_results(df=df_n, num_params=func_class.n_params, result=result, spike=spike)
             df_params = self.show_the_param_results(df=df_params, num_params=func_class.n_params,
                                                     name_to_save=name_to_save, range_spike=range_spike,
                                                     do_all=do_all, cell_name=cell_name, spike=spike)
+
 
             if show:
                 # report_fit(result)
@@ -169,7 +185,7 @@ class LMFit:
         return df
 
     def show_the_param_results(self, df: pd.DataFrame, num_params: int, name_to_save, range_spike, do_all, cell_name, spike) -> pd.DataFrame:
-        keys = ["chi_sqr", "r_2", "aic", "bic", "squared_diff"]
+        keys = ["p-value", "chi_sqr", "r_2", "adjusted_r_2", "RMSE", "aic", "bic", "squared_diff"]
         string = f"{spike + 1}.spike"
         for item in keys:
             if do_all:
