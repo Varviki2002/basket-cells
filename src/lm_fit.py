@@ -169,7 +169,7 @@ class LMFit:
         return df
 
     def show_the_param_results(self, df: pd.DataFrame, num_params: int, name_to_save, range_spike, do_all, cell_name, spike) -> pd.DataFrame:
-        keys = ["chi_stat", "p-value", "chi_sqr", "p_manu", "r_2", "aic", "bic", "squared_diff"]
+        keys = ["chi_sqr", "p_manu", "r_2", "aic", "bic", "squared_diff"]
         string = f"{spike + 1}.spike"
         for item in keys:
             if do_all:
