@@ -84,7 +84,7 @@ class LMFit:
                 self.coeff[name_to_save][cell_name][string]["aic"] = result.aic
                 self.coeff[name_to_save][cell_name][string]["bic"] = result.bic
                 self.coeff[name_to_save][cell_name][string]["chi_sqr"] = chi_sqr
-                self.coeff[name_to_save][cell_name][string]["p_manu"] = stats.chi2.sf(chi_sqr, result.nfree)
+                # self.coeff[name_to_save][cell_name][string]["p_manu"] = stats.chi2.sf(chi_sqr, result.nfree)
                 # self.coeff[name_to_save][cell_name][string]["chi_stat"] = chi2_stat
                 # self.coeff[name_to_save][cell_name][string]["p-value"] = p_value
                 self.coeff[name_to_save][cell_name][string]["squared_diff"] = squared_difference
@@ -97,7 +97,7 @@ class LMFit:
                 self.coeff[name_to_save][string]["aic"] = result.aic
                 self.coeff[name_to_save][string]["bic"] = result.bic
                 self.coeff[name_to_save][string]["chi_sqr"] = chi_sqr
-                self.coeff[name_to_save][string]["p_manu"] = stats.chi2.sf(chi_sqr, result.nfree)
+                # self.coeff[name_to_save][string]["p_manu"] = stats.chi2.sf(chi_sqr, result.nfree)
                 # self.coeff[name_to_save][string]["chi_stat"] = chi2_stat
                 # self.coeff[name_to_save][string]["p-value"] = p_value
                 self.coeff[name_to_save][string]["squared_diff"] = squared_difference
@@ -169,7 +169,7 @@ class LMFit:
         return df
 
     def show_the_param_results(self, df: pd.DataFrame, num_params: int, name_to_save, range_spike, do_all, cell_name, spike) -> pd.DataFrame:
-        keys = ["chi_sqr", "p_manu", "r_2", "aic", "bic", "squared_diff"]
+        keys = ["chi_sqr", "r_2", "aic", "bic", "squared_diff"]
         string = f"{spike + 1}.spike"
         for item in keys:
             if do_all:
