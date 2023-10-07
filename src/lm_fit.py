@@ -63,7 +63,7 @@ class LMFit:
 
             final = func_class(params=result.params, x=np.linspace(np.min(x), np.max(x), 201))
 
-            chi2_stat, p_value = stats.chisquare(data, f_exp=func_class(params=result.params, x=x))
+            # chi2_stat, p_value = stats.chisquare(data, f_exp=func_class(params=result.params, x=x))
 
             if not do_all and not choose_cells:
                 self.func_dict[name_to_save][cell_name][string] = func_class(params=result.params, x=x)
@@ -85,8 +85,8 @@ class LMFit:
                 self.coeff[name_to_save][cell_name][string]["bic"] = result.bic
                 self.coeff[name_to_save][cell_name][string]["chi_sqr"] = chi_sqr
                 self.coeff[name_to_save][cell_name][string]["p_manu"] = stats.chi2.sf(chi_sqr, result.nfree)
-                self.coeff[name_to_save][cell_name][string]["chi_stat"] = chi2_stat
-                self.coeff[name_to_save][cell_name][string]["p-value"] = p_value
+                # self.coeff[name_to_save][cell_name][string]["chi_stat"] = chi2_stat
+                # self.coeff[name_to_save][cell_name][string]["p-value"] = p_value
                 self.coeff[name_to_save][cell_name][string]["squared_diff"] = squared_difference
                 self.coeff[name_to_save][cell_name][string]["r_2"] = r2_score(y_true=data, y_pred=func_class(
                                                                                           params=result.params,
@@ -98,8 +98,8 @@ class LMFit:
                 self.coeff[name_to_save][string]["bic"] = result.bic
                 self.coeff[name_to_save][string]["chi_sqr"] = chi_sqr
                 self.coeff[name_to_save][string]["p_manu"] = stats.chi2.sf(chi_sqr, result.nfree)
-                self.coeff[name_to_save][string]["chi_stat"] = chi2_stat
-                self.coeff[name_to_save][string]["p-value"] = p_value
+                # self.coeff[name_to_save][string]["chi_stat"] = chi2_stat
+                # self.coeff[name_to_save][string]["p-value"] = p_value
                 self.coeff[name_to_save][string]["squared_diff"] = squared_difference
                 self.coeff[name_to_save][string]["r_2"] = r2_score(y_true=data, y_pred=func_class(
                     params=result.params,
