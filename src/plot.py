@@ -88,7 +88,7 @@ class Plotter:
             # plt.show()
 
     @staticmethod
-    def plot_fitted_data_eval(x, data, final, log, spike, plot_name):
+    def plot_fitted_data_eval(x, data, final, log, plot_name):
         colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(1)]
         function_colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(1)]
         if log:

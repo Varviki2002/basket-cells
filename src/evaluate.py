@@ -82,8 +82,8 @@ class Evaluate:
             if linear_regression:
                 self.plotter.different_if_plotter(df=df, p=params, ax=ax, idx=item, threshold=threshold)
             else:
-                self.plotter.plot_fitted_data(x=df["relative firing time"], data=df["IF"], final=final, log=log,
-                                              spike=0, plot_name=cell_name + spike_name, range_spike=1)
+                self.plotter.plot_fitted_data_eval(x=df["relative firing time"], data=df["IF"], final=final, log=log,
+                                                   plot_name=cell_name + spike_name)
         if linear_regression:
             if self.fit_parameters[cell_name][spike_name][round(10 ** threshold[-1])]["fp"] > 0.05 and \
                     self.fit_parameters[cell_name][spike_name][round(10 ** threshold[-1])]["r_2"] < 0.6:
