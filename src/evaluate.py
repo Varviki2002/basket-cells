@@ -84,7 +84,7 @@ class Evaluate:
 
             self.plotter.different_if_plotter(df=df, p=params, ax=ax, idx=item, threshold=threshold)
         self.plotter.plotter_params(cell_name=cell_name, spike_name=spike_name, thresholds=threshold,
-                                    dictionary=self.linear_regression_parameters)
+                                    dictionary=self.linear_regression_parameters, linear_regression=linear_regression)
 
     @staticmethod
     def linear_regression(x, y):
