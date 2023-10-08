@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import statsmodels.api as sm
+from scipy.stats import stats
+from sklearn.metrics import mean_squared_error, r2_score
 
 from src.datamanipulator import DataManipulator
 from src.lm_fit import LMFit
@@ -24,17 +26,25 @@ class Evaluate:
         self.squared_diff_dict = dict()
         self.linear_regression_parameters = dict()
         self.plotter = plotter
+        self.bad_lin_regression = []
 
     def count_if_threshold(self, cell_name, spike_name, func_class, param_values, threshold, ax, choose_cells,
-                           chosen_cells):
+                           chosen_cells, linear_regression: bool, log: bool):
         if choose_cells:
             cell_name = "all"
         if cell_name not in self.linear_regression_parameters:
             self.linear_regression_parameters[cell_name] = dict()
         self.linear_regression_parameters[cell_name][spike_name] = dict()
-        threshold = np.log10(threshold)
-        dict_frame = np.log10(self.data_class.create_frame(cell_name=cell_name, spike=spike_name,
-                                                           y=False, do_all=False, choose_cells=choose_cells, chosen_cells=chosen_cells))
+        if log:
+            threshold = np.log10(threshold)
+            dict_frame = np.log10(self.data_class.create_frame(cell_name=cell_name, spike=spike_name,
+                                                               y=False, do_all=False, choose_cells=choose_cells,
+                                                               chosen_cells=chosen_cells))
+        else:
+            threshold = threshold
+            dict_frame = self.data_class.create_frame(cell_name=cell_name, spike=spike_name,
+                                                               y=False, do_all=False, choose_cells=choose_cells,
+                                                               chosen_cells=chosen_cells)
 
         for item, num in enumerate(threshold):
             self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)] = dict()
@@ -42,18 +52,35 @@ class Evaluate:
             for i in range(0, len(dict_frame)):
                 if dict_frame["IF"].iloc[i] > num:
                     df = df.drop(labels=i, axis=0)
-            result, chisq = self.lm_fit.fit_the_function(func_class=func_class, param_values=param_values, x=df["relative firing time"], data=df["IF"])
+            result, chisq = self.lm_fit.fit_the_function(func_class=func_class, param_values=param_values,
+                                                         x=df["relative firing time"], data=df["IF"])
             final = func_class(params=result.params, x=df["relative firing time"])
             mean = np.mean(df["IF"])
-            r_2 = (np.sum((mean-df["IF"]) ** 2) - np.sum((df["IF"] - final) ** 2)) / np.sum((mean-df["IF"]) ** 2)
-            p, r_square, conf_int, fp, f, params = self.linear_regression(x=df["relative firing time"], y=df["IF"])
-            self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["p"] = p
-            # self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["chisqr"] = result.chisqr
-            self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["r_square"] = r_square
-            self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["conf_int"] = conf_int
-            self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["r_2"] = r_2
-            self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["fp"] = fp
-            self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["f"] = f
+            if linear_regression:
+                r_2 = (np.sum((mean-df["IF"]) ** 2) - np.sum((df["IF"] - final) ** 2)) / np.sum((mean-df["IF"]) ** 2)
+                p, r_square, conf_int, fp, f, params = self.linear_regression(x=df["relative firing time"], y=df["IF"])
+                self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["p"] = p
+                # self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["chisqr"] = result.chisqr
+                self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["r_square"] = r_square
+                self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["conf_int"] = conf_int
+                self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["r_2"] = r_2
+                self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["fp"] = fp
+                self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["f"] = f
+
+                if self.linear_regression_parameters[cell_name][spike_name]["fp"] > 0.05 and \
+                        self.linear_regression_parameters[cell_name][spike_name]["r_2"] < 0.6:
+                    append_name = cell_name + spike_name
+                    self.bad_lin_regression.append(append_name)
+            else:
+                chi2_stat = np.sum(result.residual ** 2 / func_class(params=result.params, x=df["relative firing time"]))
+                self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["params"] = list(result.params.valuesdict().values())
+                self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["chi_sqr"] = result.chisqr
+                self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["aic"] = result.aic
+                self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["bic"] = result.bic
+                self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["r_2"] = r2_score(y_true=df["IF"], y_pred=func_class(
+                                                                                          params=result.params,
+                                                                                          x=df["relative firing time"]))
+                self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["p"] = 1 - stats.chi2.cdf(chi2_stat, result.nfree)
 
             self.plotter.different_if_plotter(df=df, p=params, ax=ax, idx=item, threshold=threshold)
         self.plotter.plotter_params(cell_name=cell_name, spike_name=spike_name, thresholds=threshold,
