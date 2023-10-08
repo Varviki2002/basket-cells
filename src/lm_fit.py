@@ -64,6 +64,7 @@ class LMFit:
             final = func_class(params=result.params, x=np.linspace(np.min(x), np.max(x), 201))
 
             chi2_stat = np.sum(result.residual ** 2 / func_class(params=result.params, x=x))
+            chi_square_test_statistic, p_value = stats.chisquare(data, func_class(params=result.params, x=x))
 
             if not do_all and not choose_cells:
                 self.func_dict[name_to_save][cell_name][string] = func_class(params=result.params, x=x)
@@ -86,7 +87,7 @@ class LMFit:
                 self.coeff[name_to_save][cell_name][string]["chi_sqr"] = chi_sqr
                 # self.coeff[name_to_save][cell_name][string]["p_manu"] = stats.chi2.sf(chi_sqr, result.nfree)
                 # self.coeff[name_to_save][cell_name][string]["chi_stat"] = chi2_stat
-                self.coeff[name_to_save][cell_name][string]["p-value"] = 1 - stats.chi2.cdf(chi2_stat, result.nfree)
+                self.coeff[name_to_save][cell_name][string]["p-value"] = 1 - stats.chi2.cdf(chi_sqr, result.nfree)
                 self.coeff[name_to_save][cell_name][string]["squared_diff"] = squared_difference
                 self.coeff[name_to_save][cell_name][string]["r_2"] = r2_score(y_true=data, y_pred=func_class(
                                                                                           params=result.params,
