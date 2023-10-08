@@ -67,7 +67,7 @@ class Evaluate:
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["fp"] = fp
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["f"] = f
 
-            else:
+            elif log is True and linear_regression is False:
                 params = list(result.params.valuesdict().values())
                 chi2_stat = np.sum(result.residual ** 2 / func_class(params=result.params, x=df["relative firing time"]))
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["params"] = list(result.params.valuesdict().values())
@@ -78,6 +78,23 @@ class Evaluate:
                                                                                           params=result.params,
                                                                                           x=df["relative firing time"]))
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["p"] = 1 - stats.chi2.cdf(chi2_stat, result.nfree)
+
+            else:
+                params = list(result.params.valuesdict().values())
+                chi2_stat = np.sum(
+                    result.residual ** 2 / func_class(params=result.params, x=df["relative firing time"]))
+                self.fit_parameters[cell_name][spike_name][num]["params"] = list(
+                    result.params.valuesdict().values())
+                self.fit_parameters[cell_name][spike_name][num]["chi_sqr"] = result.chisqr
+                self.fit_parameters[cell_name][spike_name][num]["aic"] = result.aic
+                self.fit_parameters[cell_name][spike_name][num]["bic"] = result.bic
+                self.fit_parameters[cell_name][spike_name][num]["r_2"] = r2_score(y_true=df["IF"],
+                                                                                               y_pred=func_class(
+                                                                                                   params=result.params,
+                                                                                                   x=df[
+                                                                                                       "relative firing time"]))
+                self.fit_parameters[cell_name][spike_name][num]["p"] = 1 - stats.chi2.cdf(chi2_stat,
+                                                                                                       result.nfree)
 
             if linear_regression:
                 self.plotter.different_if_plotter(df=df, p=params, ax=ax, idx=item, threshold=threshold)
