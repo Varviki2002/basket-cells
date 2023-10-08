@@ -67,10 +67,6 @@ class Evaluate:
                 self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["fp"] = fp
                 self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["f"] = f
 
-                if self.linear_regression_parameters[cell_name][spike_name]["fp"] > 0.05 and \
-                        self.linear_regression_parameters[cell_name][spike_name]["r_2"] < 0.6:
-                    append_name = cell_name + spike_name
-                    self.bad_lin_regression.append(append_name)
             else:
                 chi2_stat = np.sum(result.residual ** 2 / func_class(params=result.params, x=df["relative firing time"]))
                 self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["params"] = list(result.params.valuesdict().values())
@@ -82,9 +78,21 @@ class Evaluate:
                                                                                           x=df["relative firing time"]))
                 self.linear_regression_parameters[cell_name][spike_name][round(10 ** num)]["p"] = 1 - stats.chi2.cdf(chi2_stat, result.nfree)
 
+            if linear_regression:
+                if self.linear_regression_parameters[cell_name][spike_name]["fp"] > 0.05 and \
+                        self.linear_regression_parameters[cell_name][spike_name]["r_2"] < 0.6:
+                    append_name = "linear_regression" + cell_name + spike_name
+                    self.bad_lin_regression.append(append_name)
+            else:
+                if self.linear_regression_parameters[cell_name][spike_name]["p"] < 0.05 and \
+                        self.linear_regression_parameters[cell_name][spike_name]["r_2"] < 0.6:
+                    append_name = "curve_fit" + cell_name + spike_name
+                    self.bad_lin_regression.append(append_name)
+
             self.plotter.different_if_plotter(df=df, p=params, ax=ax, idx=item, threshold=threshold)
         self.plotter.plotter_params(cell_name=cell_name, spike_name=spike_name, thresholds=threshold,
                                     dictionary=self.linear_regression_parameters, linear_regression=linear_regression)
+
 
     @staticmethod
     def linear_regression(x, y):
