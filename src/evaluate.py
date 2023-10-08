@@ -68,7 +68,7 @@ class Evaluate:
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["f"] = f
 
             else:
-                params = result.params
+                params = list(result.params.valuesdict().values())
                 chi2_stat = np.sum(result.residual ** 2 / func_class(params=result.params, x=df["relative firing time"]))
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["params"] = list(result.params.valuesdict().values())
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["chi_sqr"] = result.chisqr
