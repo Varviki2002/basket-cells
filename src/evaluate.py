@@ -35,7 +35,7 @@ class Evaluate:
         if cell_name not in self.fit_parameters:
             self.fit_parameters[cell_name] = dict()
         self.fit_parameters[cell_name][spike_name] = dict()
-        if log:
+        if log or linear_regression:
             threshold = np.log10(threshold)
             dict_frame = np.log10(self.data_class.create_frame(cell_name=cell_name, spike=spike_name,
                                                                y=False, do_all=False, choose_cells=choose_cells,
@@ -83,7 +83,7 @@ class Evaluate:
                 self.plotter.different_if_plotter(df=df, p=params, ax=ax, idx=item, threshold=threshold)
             else:
                 self.plotter.plot_fitted_data_eval(x=df["relative firing time"], data=df["IF"], final=final, log=log,
-                                                   plot_name=threshold, ax=ax, id=item)
+                                                   plot_name=num, ax=ax, id=item)
         if linear_regression:
             if self.fit_parameters[cell_name][spike_name][round(10 ** threshold[-1])]["fp"] > 0.05 and \
                     self.fit_parameters[cell_name][spike_name][round(10 ** threshold[-1])]["r_2"] < 0.6:
@@ -97,7 +97,7 @@ class Evaluate:
                     self.bad_lin_regression.append(append_name)
             else:
                 if self.fit_parameters[cell_name][spike_name][threshold[-1]]["p"] < 0.05 and \
-                        self.fit_parameters[cell_name][spike_name][threshold[-1]]["fp"] < 0.6:
+                        self.fit_parameters[cell_name][spike_name][threshold[-1]]["r_2"] < 0.6:
                     append_name = "curve_fit" + cell_name + spike_name
                     self.bad_lin_regression.append(append_name)
 
