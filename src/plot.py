@@ -101,8 +101,11 @@ class Plotter:
         plt.show()
 
     @staticmethod
-    def plotter_params(cell_name, spike_name, thresholds, dictionary):
-        param = ['r_square', 'fp']
+    def plotter_params(cell_name, spike_name, thresholds, dictionary, linear_regression: bool):
+        if linear_regression:
+            param = ['r_square', 'fp']
+        else:
+            param = ["p", "chi_sqr", "r_2"]
         fig, ax = plt.subplots(nrows=1, ncols=len(param), figsize=(50, 6))
         threshold = [round(10 ** i) for i in thresholds]
         for i, key in enumerate(param):
