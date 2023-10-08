@@ -79,7 +79,11 @@ class Evaluate:
                                                                                           x=df["relative firing time"]))
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["p"] = 1 - stats.chi2.cdf(chi2_stat, result.nfree)
 
-            self.plotter.different_if_plotter(df=df, p=params, ax=ax, idx=item, threshold=threshold)
+            if linear_regression:
+                self.plotter.different_if_plotter(df=df, p=params, ax=ax, idx=item, threshold=threshold)
+            else:
+                self.plotter.plot_fitted_data(x=df["relative firing time"], data=df["IF"], final=final, log=log,
+                                              spike=1, plot_name=cell_name + spike_name, range_spike=1)
         if linear_regression:
             if self.fit_parameters[cell_name][spike_name][round(10 ** threshold[-1])]["fp"] > 0.05 and \
                     self.fit_parameters[cell_name][spike_name][round(10 ** threshold[-1])]["r_2"] < 0.6:
