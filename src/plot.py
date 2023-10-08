@@ -88,19 +88,17 @@ class Plotter:
             # plt.show()
 
     @staticmethod
-    def plot_fitted_data_eval(x, data, final, log, plot_name):
+    def plot_fitted_data_eval(x, data, final, log, plot_name, ax, id):
         colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(1)]
         function_colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(1)]
         if log:
-            plt.xscale('log')
-            plt.yscale('log')
-            plt.plot(10 ** x, 10 ** data, 'o', c=colors[0])
-            plt.plot(10 ** x, 10 ** final, 'r', c=colors[0])
-            plt.title(plot_name)
+            ax[id].plot(10 ** x, 10 ** data, 'o', c=colors[0])
+            ax[id].plot(10 ** x, 10 ** final, 'r', c=colors[0])
+            ax[id].set_title(plot_name)
         else:
-            plt.plot(x, data, 'o', c=colors[0])
-            plt.plot(x, final, 'r', c=colors[0])
-            plt.title(plot_name)
+            ax[id].plot(x, data, 'o', c=colors[0])
+            ax[id].plot(x, final, 'r', c=colors[0])
+            ax[id].set_title(plot_name)
             # plt.show()
 
     @staticmethod
@@ -129,7 +127,7 @@ class Plotter:
             for item in threshold:
                 perm_list.append(dictionary[cell_name][spike_name][item][key])
             ax[i].plot(threshold, perm_list)
-            ax[i].scatter(list(zip(threshold, threshold)) if key == 'p' else threshold, perm_list)
+            ax[i].scatter(threshold, perm_list)
             ax[i].set_title(key)
 
         f_name = cell_name + "_" + spike_name + ".png"
