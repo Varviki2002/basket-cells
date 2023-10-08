@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import statsmodels.api as sm
-from scipy.stats import stats
+from scipy import stats
 from sklearn.metrics import mean_squared_error, r2_score
 
 from src.datamanipulator import DataManipulator
