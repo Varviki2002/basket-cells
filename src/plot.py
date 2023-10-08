@@ -88,6 +88,22 @@ class Plotter:
             # plt.show()
 
     @staticmethod
+    def plot_fitted_data_eval(x, data, final, log, spike, plot_name):
+        colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(1)]
+        function_colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(1)]
+        if log:
+            plt.xscale('log')
+            plt.yscale('log')
+            plt.plot(10 ** x, 10 ** data, 'o', c=colors[0])
+            plt.plot(10 ** x, 10 ** final, 'r', c=colors[0])
+            plt.title(plot_name)
+        else:
+            plt.plot(x, data, 'o', c=colors[0])
+            plt.plot(x, final, 'r', c=colors[0])
+            plt.title(plot_name)
+            # plt.show()
+
+    @staticmethod
     def different_if_plotter(df, p, ax, idx, threshold):
         ax[idx].scatter(df["relative firing time"], df["IF"])
         ax[idx].plot(df["relative firing time"], p[0] + p[1]*df["relative firing time"])
