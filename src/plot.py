@@ -92,6 +92,8 @@ class Plotter:
         colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(1)]
         function_colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(1)]
         if log:
+            ax[id].set_xscale('log')
+            ax[id].set_yscale('log')
             ax[id].plot(10 ** x, 10 ** data, 'o', c=colors[0])
             ax[id].plot(10 ** x, 10 ** final, 'r', c=colors[0])
             ax[id].set_title(plot_name)
@@ -115,13 +117,16 @@ class Plotter:
         plt.show()
 
     @staticmethod
-    def plotter_params(cell_name, spike_name, thresholds, dictionary, linear_regression: bool):
+    def plotter_params(cell_name, spike_name, thresholds, dictionary, linear_regression: bool, log:bool):
         if linear_regression:
             param = ['r_square', 'fp']
         else:
             param = ["p", "chi_sqr", "r_2"]
         fig, ax = plt.subplots(nrows=1, ncols=len(param), figsize=(50, 6))
-        threshold = [round(10 ** i) for i in thresholds]
+        if log:
+            threshold = [round(10 ** i) for i in thresholds]
+        else:
+            threshold = [i for i in thresholds]
         for i, key in enumerate(param):
             perm_list = []
             for item in threshold:

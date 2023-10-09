@@ -82,15 +82,18 @@ class DataManipulator:
                 df.sort_values(by="IF", ascending=False, inplace=True)
                 return df
         elif choose_cells:
+            self.choose_cells = {}
             if not y:
                 dictionary = self.all_in_one_dict_creating(gbz_dict=self.choose_cells, chosen_cells=chosen_cells)
                 df = pd.DataFrame.from_dict(dictionary[spike])
                 df.sort_values(by="relative firing time", ascending=False, inplace=True)
+                df.reset_index()
                 return df
             else:
                 dictionary = self.all_in_one_dict_creating(gbz_dict=self.choose_cells, chosen_cells=chosen_cells)
                 df = pd.DataFrame.from_dict(dictionary[spike])
                 df.sort_values(by="IF", ascending=False, inplace=True)
+                df = df.reset_index(inplace=True)
                 return df
         else:
             if not y:
