@@ -200,7 +200,9 @@ class LMFit:
         keys = ["p-value", "chi_sqr", "r_2", "adjusted_r_2", "RMSE", "aic", "bic", "squared_diff"]
         string = f"{spike + 1}.spike"
         for item in keys:
-            if do_all or choose_cells:
+            if do_all:
+                df.loc[item, spike + 1] = self.coeff[name_to_save][string][item]
+            elif choose_cells:
                 df.loc[item, spike + 1] = self.coeff[name_to_save][string][item]
             else:
                 df.loc[item, spike + 1] = self.coeff[name_to_save][cell_name][string][item]
