@@ -52,7 +52,7 @@ class Evaluate:
             else:
                 self.fit_parameters[cell_name][spike_name][num] = dict()
             df = dict_frame
-            for i in range(0, len(dict_frame)):
+            for i in range(len(dict_frame)-1, -1, -1):
                 if dict_frame["IF"].iloc[i] > num:
                     df = df.drop(labels=i, axis=0)
             result, chisq = self.lm_fit.fit_the_function(func_class=func_class, param_values=param_values,
