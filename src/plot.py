@@ -76,15 +76,20 @@ class Plotter:
         if log:
             plt.xscale('log')
             plt.yscale('log')
-            plt.plot(10 ** x, 10 ** data, 'o', c=colors[spike])
+            plt.plot(10 ** x, 10 ** data, 'o', c=colors[spike], label=f"{spike+1}.spike")
             plt.plot(10 ** np.linspace(np.min(x), np.max(x), 201),
                      10 ** final,
                      'r', c=colors[spike])
             plt.title(plot_name)
+            plt.xlabel("relative firing time")
+            plt.ylabel("IF")
         else:
-            plt.plot(x, data, 'o', c=colors[spike])
+            plt.plot(x, data, 'o', c=colors[spike], label=f"{spike+1}.spike")
             plt.plot(np.linspace(np.min(x), np.max(x), 201), final, 'r', c=colors[spike])
             plt.title(plot_name)
+            plt.legend([f"{spike}.spike"])
+            plt.xlabel("relative firing time")
+            plt.ylabel("IF")
             # plt.show()
 
     @staticmethod
@@ -97,10 +102,14 @@ class Plotter:
             ax[id].plot(10 ** x, 10 ** data, 'o', c=colors[0])
             ax[id].plot(10 ** x, 10 ** final, 'r', c=colors[0])
             ax[id].set_title(plot_name)
+            ax[id].set_xlabel("relative firing time")
+            ax[id].set_ylabel("IF")
         else:
             ax[id].plot(x, data, 'o', c=colors[0])
             ax[id].plot(x, final, 'r', c=colors[0])
             ax[id].set_title(plot_name)
+            ax[id].set_xlabel("relative firing time")
+            ax[id].set_ylabel("IF")
             # plt.show()
 
     @staticmethod
@@ -108,6 +117,8 @@ class Plotter:
         ax[idx].scatter(df["relative firing time"], df["IF"])
         ax[idx].plot(df["relative firing time"], p[0] + p[1]*df["relative firing time"])
         ax[idx].set_title("Threshold= " + str(round(10 ** threshold[idx])))
+        ax[id].set_xlabel("relative firing time")
+        ax[id].set_ylabel("IF")
 
     @staticmethod
     def plot_errors(dictionary: dict, threshold: list, what_to_plot: str, cell_name, spike_name):

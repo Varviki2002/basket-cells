@@ -61,11 +61,10 @@ class DataManipulator:
         self.all_in_one_dict_creating(gbz_dict=self.all_in_one_dict, chosen_cells=self.names)
         self.create_cell_dict(gbz_dict=self.dict)
 
-    def create_frame(self, cell_name: str, spike: str, y: bool, do_all: bool, choose_cells, chosen_cells) -> pd.DataFrame:
+    def create_frame(self, cell_name: str, spike: str, y: bool, do_all: bool, chosen_cells) -> pd.DataFrame:
         """
         This method creates a Dataframe from a cell's spike's relative firing time and IF.
         :param chosen_cells:
-        :param choose_cells:
         :param str cell_name: the name of the brain cell
         :param str spike: the number of the spike, for example "1.spike"
         :param bool y: if true the axes will be reversed
@@ -81,7 +80,7 @@ class DataManipulator:
                 df = pd.DataFrame.from_dict(self.all_in_one_dict[spike])
                 df.sort_values(by="IF", ascending=False, inplace=True)
                 return df
-        elif choose_cells:
+        elif isinstance(chosen_cells, list):
             self.choose_cells = {}
             if not y:
                 dictionary = self.all_in_one_dict_creating(gbz_dict=self.choose_cells, chosen_cells=chosen_cells)
@@ -105,16 +104,13 @@ class DataManipulator:
                 df.sort_values(by="IF", ascending=False, inplace=True)
                 return df
 
-    def define_axes(self, cell_name, string, do_all, log, switch_axes, choose_cells, chosen_cells):
+    def define_axes(self, cell_name, string, do_all, log, switch_axes, chosen_cells):
         if do_all:
-            df = self.create_frame(cell_name=cell_name, spike=string, y=False, do_all=do_all,
-                                   choose_cells=choose_cells, chosen_cells=chosen_cells)
-        elif choose_cells:
-            df = self.create_frame(cell_name=cell_name, spike=string, y=False, do_all=do_all,
-                                   choose_cells=choose_cells, chosen_cells=chosen_cells)
+            df = self.create_frame(cell_name=cell_name, spike=string, y=False, do_all=do_all, chosen_cells=chosen_cells)
+        elif isinstance(chosen_cells, list):
+            df = self.create_frame(cell_name=cell_name, spike=string, y=False, do_all=do_all, chosen_cells=chosen_cells)
         else:
-            df = self.create_frame(cell_name=cell_name, spike=string, y=False, do_all=do_all,
-                                   choose_cells=choose_cells, chosen_cells=chosen_cells)
+            df = self.create_frame(cell_name=cell_name, spike=string, y=False, do_all=do_all, chosen_cells=chosen_cells)
 
         if log:
             if switch_axes:

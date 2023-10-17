@@ -28,9 +28,9 @@ class Evaluate:
         self.plotter = plotter
         self.bad_lin_regression = []
 
-    def count_if_threshold(self, cell_name, spike_name, func_class, param_values, threshold, ax, choose_cells,
+    def count_if_threshold(self, cell_name, spike_name, func_class, param_values, threshold, ax,
                            chosen_cells, linear_regression: bool, log: bool):
-        if choose_cells:
+        if isinstance(chosen_cells, list):
             cell_name = "all"
         if cell_name not in self.fit_parameters:
             self.fit_parameters[cell_name] = dict()
@@ -38,13 +38,11 @@ class Evaluate:
         if log or linear_regression:
             threshold = np.log10(threshold)
             dict_frame = np.log10(self.data_class.create_frame(cell_name=cell_name, spike=spike_name,
-                                                               y=False, do_all=False, choose_cells=choose_cells,
-                                                               chosen_cells=chosen_cells))
+                                                               y=False, do_all=False, chosen_cells=chosen_cells))
         else:
             threshold = threshold
             dict_frame = self.data_class.create_frame(cell_name=cell_name, spike=spike_name,
-                                                      y=False, do_all=False, choose_cells=choose_cells,
-                                                      chosen_cells=chosen_cells)
+                                                      y=False, do_all=False, chosen_cells=chosen_cells)
 
         for item, num in enumerate(threshold):
             if log or linear_regression:
@@ -64,7 +62,6 @@ class Evaluate:
                     (mean - df["IF"]) ** 2)
                 p, r_square, conf_int, fp, f, params = self.linear_regression(x=df["relative firing time"], y=df["IF"])
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["p"] = p
-                # self.fit_parameters[cell_name][spike_name][round(10 ** num)]["chisqr"] = result.chisqr
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["r_square"] = r_square
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["conf_int"] = conf_int
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["r_2"] = r_2
@@ -76,7 +73,6 @@ class Evaluate:
                 chi2_stat = np.sum(
                     result.residual ** 2 / func_class(params=result.params, x=df["relative firing time"]))
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["params"] = list(result.params.valuesdict().values())
-                self.fit_parameters[cell_name][spike_name][round(10 ** num)]["chi_sqr"] = result.chisqr
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["aic"] = result.aic
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["bic"] = result.bic
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["r_2"] = r2_score(y_true=df["IF"],
@@ -139,13 +135,12 @@ class Evaluate:
         conf_int = result.conf_int(alpha=0.05, cols=None)
         fp = result.f_pvalue
         f = result.fvalue
-        # chisqr = result.chisqr
         return p, r_square, conf_int, fp, f, params
 
     def compare_values_to_original(self):
         pass
 
-    def squared_difference(self, string_name, cell_name, string, y, func_name, func_num):
+    """def squared_difference(self, string_name, cell_name, string, y, func_name, func_num):
         if y:
             original_data = np.log10(self.data_class.create_frame(cell_name=cell_name, spike=string, y=y,
                                                                   do_all=False)["relative firing time"])
@@ -162,8 +157,9 @@ class Evaluate:
                 fitted_data = self.lm_fit.func_dict[func_name][cell_name][string]
 
         self.evaluate[string_name] = (original_data - fitted_data) ** 2
+        """
 
-    def count_if(self, cell_name, do_all, func_class, param_values=(2, 0)):
+    """def count_if(self, cell_name, do_all, func_class, param_values=(2, 0)):
         string = f"{1}.spike"
         func_dict = self.data_class.dict[cell_name][string]
         count_threshold = list(np.arange(5, len(func_dict["IF"]), 10))
@@ -177,8 +173,9 @@ class Evaluate:
             result = self.lm_fit.fit_the_function(func_class=func_class, param_values=param_values, x=x, data=data)
             final = func_class(params=result.params, x=x)
             self.squared_diff_dict[cell_name][str(num)] = (data - final) ** 2
+        """
 
-    def absolute_difference_count(self, cell_name, string, string_name, func_name, y):
+    """def absolute_difference_count(self, cell_name, string, string_name, func_name, y):
         self.evaluate[string_name] = np.abs(self.data_class.create_frame(cell_name=cell_name,
                                                                          spike=string, y=y,
                                                                          do_all=False)["relative firing time"] - \
@@ -238,3 +235,5 @@ class Evaluate:
                 smallest.append("func_4")
 
         return smallest
+        """
+

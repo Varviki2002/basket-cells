@@ -21,13 +21,12 @@ class LMFit:
         self.coeff = dict()
         self.bad_fitting = []
 
-    def create_lmfit_curve_fit(self, cell_name: str, plot_name: str, func_class,
-                               do_all: bool, chosen_cells: list, choose_cells: bool, show: bool, switch_axes: bool,
-                               name_to_save: str, param_values: tuple, log: bool, range_spike: int,
-                               save: bool):
+    def create_lmfit_curve_fit(self, cell_name: str, plot_name: str, range_spike: int, func_class, param_values: tuple,
+                               do_all: bool, log: bool, show: bool, switch_axes: bool,
+                               name_to_save: str, save: bool, chosen_cells=None):
         """
         This method makes the curve fitting to the points of the given spike's cells.
-        :param choose_cells:
+        :param save:
         :param range_spike:
         :param chosen_cells:
         :param log:
@@ -42,12 +41,12 @@ class LMFit:
         :return -> pd.DataFrames: the parameters and their values will be shown
         """
         letters = ["a1", "a2", "a3", "a4"]
-        df_n = pd.DataFrame(index=letters[:func_class.n_params], columns=[i + 1 for i in range(range_spike)]).fillna(0)
-        df_params = pd.DataFrame(columns=[i + 1 for i in range(range_spike)]).fillna(0)
+        df_n = pd.DataFrame(index=[i + 1 for i in range(range_spike)], columns=letters[:func_class.n_params]).fillna(0)
+        df_params = pd.DataFrame(index=[i + 1 for i in range(range_spike)]).fillna(0)
 
         if name_to_save not in self.func_dict:
             self.func_dict[name_to_save] = dict()
-        if not do_all and not choose_cells:
+        if not do_all and not isinstance(chosen_cells, list):
             if cell_name not in self.func_dict[name_to_save]:
                 self.func_dict[name_to_save][cell_name] = dict()
 
@@ -57,7 +56,7 @@ class LMFit:
         for spike in range(0, range_spike):
             string = f"{spike + 1}.spike"
             x, data = self.data_class.define_axes(cell_name=cell_name, string=string,
-                                                  do_all=do_all, choose_cells=choose_cells, chosen_cells=chosen_cells,
+                                                  do_all=do_all, chosen_cells=chosen_cells,
                                                   log=log, switch_axes=switch_axes)
 
             result, chi_sqr = self.fit_the_function(func_class=func_class, param_values=param_values, x=x, data=data)
@@ -67,7 +66,7 @@ class LMFit:
             chi2_stat = np.sum(result.residual ** 2 / func_class(params=result.params, x=x))
             # chi_square_test_statistic, p_value = stats.chisquare(data, func_class(params=result.params, x=x))
 
-            if not do_all and not choose_cells:
+            if not do_all and not isinstance(chosen_cells, list):
                 self.func_dict[name_to_save][cell_name][string] = func_class(params=result.params, x=x)
             else:
                 self.func_dict[name_to_save][string] = func_class(params=result.params, x=x)
@@ -77,7 +76,7 @@ class LMFit:
                     ((10 ** data) - (10 ** func_class(params=result.params, x=x))) ** 2 / len(data))
             else:
                 squared_difference = np.sum((data - func_class(params=result.params, x=x)) ** 2 / len(data))
-            if not do_all and not choose_cells:
+            if not do_all and not isinstance(chosen_cells, list):
                 if cell_name not in self.coeff[name_to_save]:
                     self.coeff[name_to_save][cell_name] = dict()
                 if string not in self.coeff[name_to_save][cell_name]:
@@ -85,23 +84,25 @@ class LMFit:
                 self.coeff[name_to_save][cell_name][string]["params"] = list(result.params.valuesdict().values())
                 self.coeff[name_to_save][cell_name][string]["aic"] = result.aic
                 self.coeff[name_to_save][cell_name][string]["bic"] = result.bic
-                self.coeff[name_to_save][cell_name][string]["chi_sqr"] = chi_sqr
-                # self.coeff[name_to_save][cell_name][string]["p_manu"] = stats.chi2.sf(chi_sqr, result.nfree)
-                # self.coeff[name_to_save][cell_name][string]["chi_stat"] = chi2_stat
                 self.coeff[name_to_save][cell_name][string]["p-value"] = 1 - stats.chi2.cdf(chi2_stat, result.nfree)
                 self.coeff[name_to_save][cell_name][string]["squared_diff"] = squared_difference
                 self.coeff[name_to_save][cell_name][string]["r_2"] = r2_score(y_true=data, y_pred=func_class(
-                                                                                          params=result.params,
-                                                                                          x=x))
+                    params=result.params,
+                    x=x))
                 self.coeff[name_to_save][cell_name][string]["adjusted_r_2"] = 1 - \
-                                                                    (1 - r2_score(y_true=data,
-                                                                                  y_pred=func_class(params=result.params,
-                                                                                                     x=x))) * \
-                                                                     (len(data)-1) / (len(data)-func_class.n_params-1)
-                self.coeff[name_to_save][cell_name][string]["RMSE"] = np.sqrt(mean_squared_error(y_true=data, y_pred=func_class(
-                                                                                        params=result.params, x=x)))
+                                                                              (1 - r2_score(y_true=data,
+                                                                                            y_pred=func_class(
+                                                                                                params=result.params,
+                                                                                                x=x))) * \
+                                                                              (len(data) - 1) / (
+                                                                                      len(data) - func_class.n_params - 1)
+                self.coeff[name_to_save][cell_name][string]["RMSE"] = np.sqrt(mean_squared_error(y_true=data,
+                                                                                                 y_pred=func_class(
+                                                                                                     params=result.params,
+                                                                                                     x=x)))
 
-                if self.coeff[name_to_save][cell_name][string]["p-value"] < 0.05 and self.coeff[name_to_save][cell_name][string]["r_2"] < 0.6:
+                if self.coeff[name_to_save][cell_name][string]["p-value"] < 0.05 and \
+                        self.coeff[name_to_save][cell_name][string]["r_2"] < 0.6:
                     append_name = cell_name + str(spike)
                     self.bad_fitting.append(append_name)
 
@@ -110,9 +111,6 @@ class LMFit:
                 self.coeff[name_to_save][string]["params"] = list(result.params.valuesdict().values())
                 self.coeff[name_to_save][string]["aic"] = result.aic
                 self.coeff[name_to_save][string]["bic"] = result.bic
-                self.coeff[name_to_save][string]["chi_sqr"] = chi_sqr
-                # self.coeff[name_to_save][string]["p_manu"] = stats.chi2.sf(chi_sqr, result.nfree)
-                # self.coeff[name_to_save][string]["chi_stat"] = chi2_stat
                 self.coeff[name_to_save][string]["p-value"] = 1 - stats.chi2.cdf(chi2_stat, result.nfree)
                 self.coeff[name_to_save][string]["squared_diff"] = squared_difference
                 self.coeff[name_to_save][string]["r_2"] = r2_score(y_true=data, y_pred=func_class(
@@ -122,9 +120,10 @@ class LMFit:
                                                                    (1 - r2_score(y_true=data,
                                                                                  y_pred=func_class(params=result.params,
                                                                                                    x=x))) * \
-                                                                   (len(data) - 1) / (len(data) - func_class.n_params - 1)
+                                                                   (len(data) - 1) / (
+                                                                           len(data) - func_class.n_params - 1)
                 self.coeff[name_to_save][string]["RMSE"] = np.sqrt(mean_squared_error(y_true=data, y_pred=func_class(
-                                                                                params=result.params, x=x)))
+                    params=result.params, x=x)))
 
                 if self.coeff[name_to_save][string]["p-value"] < 0.05 and self.coeff[name_to_save][string]["r_2"] < 0.6:
                     if do_all is True:
@@ -136,7 +135,8 @@ class LMFit:
             df_n = self.show_the_fit_results(df=df_n, num_params=func_class.n_params, result=result, spike=spike)
             df_params = self.show_the_param_results(df=df_params, num_params=func_class.n_params,
                                                     name_to_save=name_to_save, range_spike=range_spike,
-                                                    do_all=do_all, cell_name=cell_name, spike=spike, choose_cells=choose_cells)
+                                                    do_all=do_all, cell_name=cell_name, spike=spike,
+                                                    chosen_cells=chosen_cells)
 
             if show:
                 # report_fit(result)
@@ -150,6 +150,7 @@ class LMFit:
                                                   spike=spike, plot_name=plot_name, range_spike=range_spike)
             else:
                 pass
+        plt.legend()
         if save:
             param_name = 'params_' + plot_name + str(func_class.n_params) + '.xlsx'
             evaluat = "evaluate" + plot_name + str(func_class.n_params) + '.xlsx'
@@ -193,17 +194,18 @@ class LMFit:
         letters = ["a1", "a2", "a3", "a4"]
         for i in range(num_params):
             string = f"a{i + 1}_param"
-            df.loc[letters[i], spike + 1] = result.params.valuesdict()[string]
+            df.loc[spike + 1, letters[i]] = result.params.valuesdict()[string]
         return df
 
-    def show_the_param_results(self, df: pd.DataFrame, num_params: int, name_to_save, range_spike, do_all, cell_name, spike, choose_cells) -> pd.DataFrame:
-        keys = ["p-value", "chi_sqr", "r_2", "adjusted_r_2", "RMSE", "aic", "bic", "squared_diff"]
+    def show_the_param_results(self, df: pd.DataFrame, num_params: int, name_to_save, range_spike, do_all, cell_name,
+                               spike, chosen_cells) -> pd.DataFrame:
+        keys = ["p-value", "r_2", "adjusted_r_2", "RMSE", "aic", "bic", "squared_diff"]
         string = f"{spike + 1}.spike"
         for item in keys:
             if do_all:
-                df.loc[item, spike + 1] = self.coeff[name_to_save][string][item]
-            elif choose_cells:
-                df.loc[item, spike + 1] = self.coeff[name_to_save][string][item]
+                df.loc[spike + 1, item] = self.coeff[name_to_save][string][item]
+            elif isinstance(chosen_cells, list):
+                df.loc[spike + 1, item] = self.coeff[name_to_save][string][item]
             else:
-                df.loc[item, spike + 1] = self.coeff[name_to_save][cell_name][string][item]
+                df.loc[spike + 1, item] = self.coeff[name_to_save][cell_name][string][item]
         return df
