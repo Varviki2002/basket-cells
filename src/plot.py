@@ -117,8 +117,8 @@ class Plotter:
         ax[idx].scatter(df["relative firing time"], df["IF"])
         ax[idx].plot(df["relative firing time"], p[0] + p[1]*df["relative firing time"])
         ax[idx].set_title("Threshold= " + str(round(10 ** threshold[idx])))
-        ax[id].set_xlabel("relative firing time")
-        ax[id].set_ylabel("IF")
+        ax[idx].set_xlabel("relative firing time")
+        ax[idx].set_ylabel("IF")
 
     @staticmethod
     def plot_errors(dictionary: dict, threshold: list, what_to_plot: str, cell_name, spike_name):
