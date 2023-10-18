@@ -1,3 +1,5 @@
+import json
+
 from lmfit import Minimizer, Parameters
 import numpy as np
 import matplotlib.pyplot as plt
@@ -20,6 +22,7 @@ class LMFit:
         self.func_dict = {}
         self.coeff = dict()
         self.bad_fitting = []
+        self.df = pd.DataFrame()
 
     def create_lmfit_curve_fit(self, cell_name: str, plot_name: str, range_spike: int, func_class, param_values: tuple,
                                do_all: bool, log: bool, show: bool, switch_axes: bool,
@@ -150,14 +153,29 @@ class LMFit:
                                                   spike=spike, plot_name=plot_name, range_spike=range_spike)
             else:
                 pass
-        plt.legend()
+        if show:
+            plt.legend()
         if save:
-            param_name = 'params_' + plot_name + str(func_class.n_params) + '.xlsx'
-            evaluat = "evaluate" + plot_name + str(func_class.n_params) + '.xlsx'
+            df_n_json = df_n.to_dict()
+            df_params_json = df_params.to_dict()
+
+            out = {'arguments of the function': {"cell_name":cell_name, "func_class": str(func_class),
+                                                 'param_values': param_values, "chosen_cells": chosen_cells,
+                                                 "do_all": do_all, "name_to_save": name_to_save},
+                   'df_n': df_n_json,
+                   'df_params': df_params_json,
+                   }
+
+            # evaluat = "evaluate" + plot_name + str(func_class.n_params) + '.xlsx'
+            param_name = plot_name + str(func_class.n_params)
             file_param = "../generated/" + param_name
-            file_eval = "../generated/" + evaluat
-            df_n.to_excel(file_param)
-            df_params.to_excel(file_eval)
+            # file_eval = "../generated/" + evaluat
+            # df_n.to_excel(file_param)
+            # df_params.to_excel(file_eval)
+            out_file = open(f"{file_param}.json", "w")
+            json.dump(out, out_file, indent=6)
+            out_file.close()
+            plt.savefig(file_param)
         if show:
             with pd.option_context('display.max_rows', None,
                                    'display.max_columns', None,

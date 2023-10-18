@@ -124,6 +124,22 @@ class Evaluate:
         self.plotter.plotter_params(cell_name=cell_name, spike_name=spike_name, thresholds=threshold,
                                     dictionary=self.fit_parameters, linear_regression=linear_regression, log=log)
 
+        if linear_regression:
+            dictionary = {cell_name: {'fp': [self.fit_parameters[cell_name][spike_name][num]["fp"] for num in threshold],
+                                      'r_2': [self.fit_parameters[cell_name][spike_name][num]["r_2"] for num in threshold]}}
+        else:
+            dictionary = {
+                cell_name: {'p': [self.fit_parameters[cell_name][spike_name][num]["p"] for num in threshold],
+                            'r_2': [self.fit_parameters[cell_name][spike_name][num]["r_2"] for num in threshold]}}
+        reform = {(outerKey, innerKey): values for outerKey, innerDict in dictionary.items() for innerKey, values in
+                  innerDict.items()}
+        df = pd.DataFrame.from_dict(reform, orient='index').transpose()
+        df.columns = pd.MultiIndex.from_tuples(df.columns)
+
+        evaluat = cell_name + str(func_class.n_params) + '.xlsx'
+        file_eval = "../generated/" + evaluat
+        df.to_excel(file_eval)
+
     @staticmethod
     def linear_regression(x, y):
         x = sm.add_constant(x)
