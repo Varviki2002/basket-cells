@@ -27,6 +27,7 @@ class Evaluate:
         self.fit_parameters = dict()
         self.plotter = plotter
         self.bad_lin_regression = []
+        self.multiindex_dictionary = {}
 
     def count_if_threshold(self, cell_name, spike_name, func_class, param_values, threshold, ax,
                            chosen_cells, linear_regression: bool, log: bool):

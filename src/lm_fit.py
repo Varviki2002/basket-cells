@@ -167,7 +167,7 @@ class LMFit:
                    }
 
             # evaluat = "evaluate" + plot_name + str(func_class.n_params) + '.xlsx'
-            param_name = plot_name + str(func_class.n_params)
+            param_name = plot_name + "_" + str(func_class.n_params)
             file_param = "../generated/" + param_name
             # file_eval = "../generated/" + evaluat
             # df_n.to_excel(file_param)
