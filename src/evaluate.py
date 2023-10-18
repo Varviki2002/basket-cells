@@ -125,12 +125,17 @@ class Evaluate:
                                     dictionary=self.fit_parameters, linear_regression=linear_regression, log=log)
 
         if linear_regression:
-            dictionary = {cell_name: {'fp': [self.fit_parameters[cell_name][spike_name][num]["fp"] for num in threshold],
-                                      'r_2': [self.fit_parameters[cell_name][spike_name][num]["r_2"] for num in threshold]}}
+            dictionary = {cell_name: {'fp': [self.fit_parameters[cell_name][spike_name][round(10 ** num)]["fp"] for num in threshold],
+                                      'r_2': [self.fit_parameters[cell_name][spike_name][round(10 ** num)]["r_2"] for num in threshold]}}
         else:
-            dictionary = {
-                cell_name: {'p': [self.fit_parameters[cell_name][spike_name][num]["p"] for num in threshold],
-                            'r_2': [self.fit_parameters[cell_name][spike_name][num]["r_2"] for num in threshold]}}
+            if log:
+                dictionary = {
+                    cell_name: {'p': [self.fit_parameters[cell_name][spike_name][round(10 ** num)]["p"] for num in threshold],
+                                'r_2': [self.fit_parameters[cell_name][spike_name][round(10 ** num)]["r_2"] for num in threshold]}}
+            else:
+                dictionary = {
+                    cell_name: {'p': [self.fit_parameters[cell_name][spike_name][num]["p"] for num in threshold],
+                                'r_2': [self.fit_parameters[cell_name][spike_name][num]["r_2"] for num in threshold]}}
         reform = {(outerKey, innerKey): values for outerKey, innerDict in dictionary.items() for innerKey, values in
                   innerDict.items()}
         df = pd.DataFrame.from_dict(reform, orient='index').transpose()
