@@ -73,7 +73,7 @@ class Evaluate:
                 params = list(result.params.valuesdict().values())
                 chi2_stat = np.sum(
                     result.residual ** 2 / func_class(params=result.params, x=df["relative firing time"]))
-                self.fit_parameters[cell_name][spike_name][round(10 ** num)]["params"] = list(result.params.valuesdict().values())
+                # self.fit_parameters[cell_name][spike_name][round(10 ** num)]["params"] = list(result.params.valuesdict().values())
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["aic"] = result.aic
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["bic"] = result.bic
                 self.fit_parameters[cell_name][spike_name][round(10 ** num)]["r_2"] = r2_score(y_true=df["IF"],
@@ -86,8 +86,8 @@ class Evaluate:
             else:
                 params = list(result.params.valuesdict().values())
                 chi2_stat = np.sum(result.residual ** 2 / func_class(params=result.params, x=df["relative firing time"]))
-                self.fit_parameters[cell_name][spike_name][num]["params"] = list(result.params.valuesdict().values())
-                self.fit_parameters[cell_name][spike_name][num]["chi_sqr"] = result.chisqr
+                # self.fit_parameters[cell_name][spike_name][num]["params"] = list(result.params.valuesdict().values())
+                # self.fit_parameters[cell_name][spike_name][num]["chi_sqr"] = result.chisqr
                 self.fit_parameters[cell_name][spike_name][num]["aic"] = result.aic
                 self.fit_parameters[cell_name][spike_name][num]["bic"] = result.bic
                 self.fit_parameters[cell_name][spike_name][num]["r_2"] = r2_score(y_true=df["IF"],

@@ -36,7 +36,7 @@ class Plotter:
         self.dict = data_class.dict
         self.names = data_class.names
 
-    def plot_spike(self, name: str, spike_name: str, color: str, all: bool) -> None:
+    def plot_spike(self, name: str, spike_name: str, color: str, all: bool, chosen_cells: list) -> None:
         """
         This method plots relative firing time and IF of the given cell's spike.
         :param str name: the name of the cell
@@ -46,6 +46,10 @@ class Plotter:
         """
         if all:
             all_dict = self.data_class.all_in_one_dict
+            plt.scatter(all_dict[spike_name]["relative firing time"],
+                        all_dict[spike_name]["IF"], c=color)
+        elif isinstance(chosen_cells, list):
+            all_dict = self.data_class.all_in_one_dict_creating(gbz_dict=self.data_class.choose_cells, chosen_cells=chosen_cells)
             plt.scatter(all_dict[spike_name]["relative firing time"],
                         all_dict[spike_name]["IF"], c=color)
         else:

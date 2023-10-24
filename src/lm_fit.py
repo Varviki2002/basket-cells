@@ -25,8 +25,8 @@ class LMFit:
         self.df = pd.DataFrame()
 
     def create_lmfit_curve_fit(self, cell_name: str, plot_name: str, range_spike: int, func_class, param_values: tuple,
-                               do_all: bool, log: bool, show: bool, switch_axes: bool,
-                               name_to_save: str, save: bool, chosen_cells=None):
+                               do_all: bool, log: bool, show: bool, name_to_save: str, save: bool,
+                               chosen_cells=None, switch_axes=False):
         """
         This method makes the curve fitting to the points of the given spike's cells.
         :param save:
@@ -84,7 +84,7 @@ class LMFit:
                     self.coeff[name_to_save][cell_name] = dict()
                 if string not in self.coeff[name_to_save][cell_name]:
                     self.coeff[name_to_save][cell_name][string] = dict()
-                self.coeff[name_to_save][cell_name][string]["params"] = list(result.params.valuesdict().values())
+                # self.coeff[name_to_save][cell_name][string]["params"] = list(result.params.valuesdict().values())
                 self.coeff[name_to_save][cell_name][string]["aic"] = result.aic
                 self.coeff[name_to_save][cell_name][string]["bic"] = result.bic
                 self.coeff[name_to_save][cell_name][string]["p-value"] = 1 - stats.chi2.cdf(chi2_stat, result.nfree)
@@ -111,7 +111,7 @@ class LMFit:
 
             else:
                 self.coeff[name_to_save][string] = dict()
-                self.coeff[name_to_save][string]["params"] = list(result.params.valuesdict().values())
+                # self.coeff[name_to_save][string]["params"] = list(result.params.valuesdict().values())
                 self.coeff[name_to_save][string]["aic"] = result.aic
                 self.coeff[name_to_save][string]["bic"] = result.bic
                 self.coeff[name_to_save][string]["p-value"] = 1 - stats.chi2.cdf(chi2_stat, result.nfree)
