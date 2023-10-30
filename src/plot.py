@@ -137,7 +137,7 @@ class Plotter:
         if linear_regression:
             param = ['r_square', 'fp']
         else:
-            param = ["p", "chi_sqr", "r_2"]
+            param = ["p", "r_2"]
         fig, ax = plt.subplots(nrows=1, ncols=len(param), figsize=(50, 6))
         if log:
             threshold = [round(10 ** i) for i in thresholds]
