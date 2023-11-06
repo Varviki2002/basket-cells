@@ -121,6 +121,7 @@ class Plotter:
 
     @staticmethod
     def different_if_plotter(df, p, ax, idx, threshold):
+        ax[idx].set_ylim(0, threshold[-1])
         ax[idx].scatter(df["relative firing time"], df["IF"])
         ax[idx].plot(df["relative firing time"], p[0] + p[1]*df["relative firing time"])
         ax[idx].set_title("Threshold= " + str(round(10 ** threshold[idx])))
