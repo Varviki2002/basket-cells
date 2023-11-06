@@ -102,6 +102,7 @@ class Plotter:
         colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(1)]
         function_colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(1)]
         if log:
+            ax[id].set_ylim(0, 270)
             ax[id].set_xscale('log')
             ax[id].set_yscale('log')
             ax[id].plot(10 ** x, 10 ** data, 'o', c=colors[0])
@@ -110,6 +111,7 @@ class Plotter:
             ax[id].set_xlabel("relative firing time")
             ax[id].set_ylabel("IF")
         else:
+            ax[id].set_ylim(0, 270)
             ax[id].plot(x, data, 'o', c=colors[0])
             ax[id].plot(x, final, 'r', c=colors[0])
             ax[id].set_title(plot_name)
@@ -147,6 +149,7 @@ class Plotter:
             perm_list = []
             for item in threshold:
                 perm_list.append(dictionary[cell_name][spike_name][item][key])
+            ax[i].set_ylim(0, threshold[-1])
             ax[i].plot(threshold, perm_list)
             ax[i].scatter(threshold, perm_list)
             ax[i].set_title(key)
