@@ -150,7 +150,6 @@ class Plotter:
             perm_list = []
             for item in threshold:
                 perm_list.append(dictionary[cell_name][spike_name][item][key])
-            ax[i].set_ylim(0, threshold[-1])
             ax[i].plot(threshold, perm_list)
             ax[i].scatter(threshold, perm_list)
             ax[i].set_title(key)
