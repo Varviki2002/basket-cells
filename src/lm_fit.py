@@ -114,7 +114,7 @@ class LMFit:
                 # self.coeff[name_to_save][string]["params"] = list(result.params.valuesdict().values())
                 self.coeff[name_to_save][string]["aic"] = result.aic
                 self.coeff[name_to_save][string]["bic"] = result.bic
-                self.coeff[name_to_save][string]["p-value"] = 1 - stats.chi2.cdf(chi2_stat, result.nfree)
+                self.coeff[name_to_save][string]["p-value"] = 1 - stats.chi2.cdf(chi_sqr, result.nfree)
                 self.coeff[name_to_save][string]["squared_diff"] = squared_difference
                 self.coeff[name_to_save][string]["r_2"] = r2_score(y_true=data, y_pred=func_class(
                     params=result.params,
