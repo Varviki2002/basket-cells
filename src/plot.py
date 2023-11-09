@@ -102,8 +102,8 @@ class Plotter:
         colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(1)]
         function_colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(1)]
         if log:
-            ax[id].set_xlim(0, 250)
-            ax[id].set_ylim(120, 350)
+            ax[id].set_xlim(0, np.log10(250))
+            ax[id].set_ylim(np.log10(120), np.log10(350))
             ax[id].set_xscale('log')
             ax[id].set_yscale('log')
             ax[id].plot(10 ** x, 10 ** data, 'o', c=colors[0])
@@ -123,8 +123,8 @@ class Plotter:
 
     @staticmethod
     def different_if_plotter(df, p, ax, idx, threshold):
-        ax[idx].set_xlim(0, 250)
-        ax[idx].set_ylim(120, threshold[-1])
+        ax[idx].set_xlim(0, np.log10(250))
+        ax[idx].set_ylim(np.log10(120), threshold[-1])
         ax[idx].scatter(df["relative firing time"], df["IF"])
         ax[idx].plot(df["relative firing time"], p[0] + p[1]*df["relative firing time"])
         ax[idx].set_title("Threshold= " + str(round(10 ** threshold[idx])))
