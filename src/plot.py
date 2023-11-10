@@ -84,13 +84,13 @@ class Plotter:
             plt.plot(10 ** x, 10 ** data, 'o', c=color[spike], label=f"{spike+1}.spike")
             plt.plot(10 ** np.linspace(np.min(x), np.max(x), 201),
                      10 ** final,
-                     'r', c=colors[spike])
+                     'r', c=color[spike])
             plt.title(plot_name)
             plt.xlabel("relative firing time")
             plt.ylabel("IF")
         else:
             plt.plot(x, data, 'o', c=color[spike], label=f"{spike+1}.spike")
-            plt.plot(np.linspace(np.min(x), np.max(x), 201), final, 'r', c=colors[spike])
+            plt.plot(np.linspace(np.min(x), np.max(x), 201), final, 'r', c=color[spike])
             plt.title(plot_name)
             plt.legend([f"{spike}.spike"])
             plt.xlabel("relative firing time")
