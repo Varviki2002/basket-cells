@@ -44,6 +44,7 @@ class LMFit:
         :return -> pd.DataFrames: the parameters and their values will be shown
         """
         letters = ["a1", "a2", "a3", "a4"]
+        color = ["blue", "orange", "green", "red", "purple"]
         df_n = pd.DataFrame(index=[i + 1 for i in range(range_spike)], columns=letters[:func_class.n_params]).fillna(0)
         df_params = pd.DataFrame(index=[i + 1 for i in range(range_spike)]).fillna(0)
 
@@ -146,11 +147,13 @@ class LMFit:
                 # plot results
                 if log:
                     self.plotter.plot_fitted_data(x=x, data=data, final=final, log=log,
-                                                  spike=spike, plot_name=plot_name, range_spike=range_spike)
+                                                  spike=spike, plot_name=plot_name, range_spike=range_spike,
+                                                  color=color)
 
                 else:
                     self.plotter.plot_fitted_data(x=x, data=data, final=final, log=log,
-                                                  spike=spike, plot_name=plot_name, range_spike=range_spike)
+                                                  spike=spike, plot_name=plot_name, range_spike=range_spike,
+                                                  color=color)
             else:
                 pass
         if show:
@@ -159,7 +162,7 @@ class LMFit:
             df_n_json = df_n.to_dict()
             df_params_json = df_params.to_dict()
 
-            out = {'arguments of the function': {"cell_name":cell_name, "func_class": str(func_class),
+            out = {'arguments of the function': {"cell_name": cell_name, "func_class": str(func_class),
                                                  'param_values': param_values, "chosen_cells": chosen_cells,
                                                  "do_all": do_all, "name_to_save": name_to_save},
                    'df_n': df_n_json,
