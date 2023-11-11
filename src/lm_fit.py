@@ -44,7 +44,6 @@ class LMFit:
         :return -> pd.DataFrames: the parameters and their values will be shown
         """
         letters = ["a1", "a2", "a3", "a4"]
-        color = ["blue", "orange", "green", "red", "purple"]
         df_n = pd.DataFrame(index=[i + 1 for i in range(range_spike)], columns=letters[:func_class.n_params]).fillna(0)
         df_params = pd.DataFrame(index=[i + 1 for i in range(range_spike)]).fillna(0)
 
@@ -147,13 +146,11 @@ class LMFit:
                 # plot results
                 if log:
                     self.plotter.plot_fitted_data(x=x, data=data, final=final, log=log,
-                                                  spike=spike, plot_name=plot_name, range_spike=range_spike,
-                                                  color=color)
+                                                  spike=spike, plot_name=plot_name, range_spike=range_spike)
 
                 else:
                     self.plotter.plot_fitted_data(x=x, data=data, final=final, log=log,
-                                                  spike=spike, plot_name=plot_name, range_spike=range_spike,
-                                                  color=color)
+                                                  spike=spike, plot_name=plot_name, range_spike=range_spike)
             else:
                 pass
         if show:

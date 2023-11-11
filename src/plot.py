@@ -75,22 +75,22 @@ class Plotter:
             self.plot_spike(name=cell_name, spike_name=spike, color=color[i - 1], all=False)
 
     @staticmethod
-    def plot_fitted_data(x, data, final, log, spike, plot_name, range_spike, color):
+    def plot_fitted_data(x, data, final, log, spike, plot_name, range_spike):
         colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(range_spike)]
         function_colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(range_spike)]
         if log:
             plt.xscale('log')
             plt.yscale('log')
-            plt.plot(10 ** x, 10 ** data, 'o', c=color[spike], label=f"{spike+1}.spike")
-            #plt.plot(10 ** np.linspace(np.min(x), np.max(x), 201),
-            #         10 ** final,
-             #        'r', c=color[spike])
+            plt.plot(10 ** x, 10 ** data, 'o', c=colors[spike], label=f"{spike+1}.spike")
+            plt.plot(10 ** np.linspace(np.min(x), np.max(x), 201),
+                     10 ** final,
+                     'r', c=colors[spike])
             plt.title(plot_name)
             plt.xlabel("relative firing time")
             plt.ylabel("IF")
         else:
-            plt.plot(x, data, 'o', c=color[spike], label=f"{spike+1}.spike")
-            # plt.plot(np.linspace(np.min(x), np.max(x), 201), final, 'r', c=color[spike])
+            plt.plot(x, data, 'o', c=colors[spike], label=f"{spike+1}.spike")
+            plt.plot(np.linspace(np.min(x), np.max(x), 201), final, 'r', c=colors[spike])
             plt.title(plot_name)
             plt.legend([f"{spike}.spike"])
             plt.xlabel("relative firing time")
