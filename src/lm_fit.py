@@ -66,7 +66,7 @@ class LMFit:
 
             final = func_class(params=result.params, x=np.linspace(np.min(x), np.max(x), 201))
 
-            chi2_stat = np.sum(result.residual ** 2 / func_class(params=result.params, x=x))
+            # chi2_stat = np.sum(result.residual ** 2 / func_class(params=result.params, x=x))
             # chi_square_test_statistic, p_value = stats.chisquare(data, func_class(params=result.params, x=x))
 
             if not do_all and not isinstance(chosen_cells, list):
@@ -142,8 +142,6 @@ class LMFit:
                                                     chosen_cells=chosen_cells)
 
             if show:
-                # report_fit(result)
-                # plot results
                 if log:
                     self.plotter.plot_fitted_data(x=x, data=data, final=final, log=log,
                                                   spike=spike, plot_name=plot_name, range_spike=range_spike)
@@ -169,13 +167,13 @@ class LMFit:
             # evaluat = "evaluate" + plot_name + str(func_class.n_params) + '.xlsx'
             param_name = plot_name + "_" + str(func_class.n_params)
             file_param = "../generated/" + param_name
+            plt.savefig(file_param)
             # file_eval = "../generated/" + evaluat
             # df_n.to_excel(file_param)
             # df_params.to_excel(file_eval)
             out_file = open(f"{file_param}.json", "w")
             json.dump(out, out_file, indent=6)
             out_file.close()
-            plt.savefig(file_param)
         if show:
             with pd.option_context('display.max_rows', None,
                                    'display.max_columns', None,
