@@ -156,7 +156,7 @@ class LMFit:
         if save:
             param_name = plot_name + "_" + str(func_class.n_params)
             file_param = "../generated/" + param_name
-            plt.savefig(file_param)
+            plt.savefig(f"{file_param}.png")
             df_n_json = df_n.to_dict()
             df_params_json = df_params.to_dict()
 
