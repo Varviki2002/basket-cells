@@ -102,8 +102,6 @@ class Plotter:
         colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(1)]
         function_colors = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])for i in range(1)]
         if log:
-            ax[id].set_xlim(0, np.log10(280))
-            ax[id].set_ylim(0, np.log10(340))
             ax[id].set_xscale('log')
             ax[id].set_yscale('log')
             ax[id].plot(10 ** x, 10 ** data, 'o', c=colors[0])

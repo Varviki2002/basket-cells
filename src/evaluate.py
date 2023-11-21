@@ -80,7 +80,7 @@ class Evaluate:
                                                                                                y_pred=func_class(
                                                                                                    params=result.params,
                                                                                                    x=df["relative firing time"]))
-                self.fit_parameters[cell_name][spike_name][round(10 ** num)]["p"] = 1 - stats.chi2.cdf(chi2_stat,
+                self.fit_parameters[cell_name][spike_name][round(10 ** num)]["p"] = 1 - stats.chi2.cdf(chisq,
                                                                                                        result.nfree)
 
             else:
@@ -94,7 +94,7 @@ class Evaluate:
                                                                                   y_pred=func_class(
                                                                                       params=result.params,
                                                                                       x=df["relative firing time"]))
-                self.fit_parameters[cell_name][spike_name][num]["p"] = 1 - stats.chi2.cdf(chi2_stat,
+                self.fit_parameters[cell_name][spike_name][num]["p"] = 1 - stats.chi2.cdf(chisq,
                                                                                           result.nfree)
 
             if linear_regression:
