@@ -154,6 +154,9 @@ class LMFit:
         if show:
             plt.legend()
         if save:
+            param_name = plot_name + "_" + str(func_class.n_params)
+            file_param = "../generated/" + param_name
+            plt.savefig(file_param)
             df_n_json = df_n.to_dict()
             df_params_json = df_params.to_dict()
 
@@ -165,9 +168,6 @@ class LMFit:
                    }
 
             # evaluat = "evaluate" + plot_name + str(func_class.n_params) + '.xlsx'
-            param_name = plot_name + "_" + str(func_class.n_params)
-            file_param = "../generated/" + param_name
-            plt.savefig(file_param)
             # file_eval = "../generated/" + evaluat
             # df_n.to_excel(file_param)
             # df_params.to_excel(file_eval)
