@@ -23,6 +23,7 @@ class LMFit:
         self.coeff = dict()
         self.bad_fitting = []
         self.df = pd.DataFrame()
+        self.plot_data = {}
 
     def create_lmfit_curve_fit(self, cell_name: str, plot_name: str, range_spike: int, func_class, param_values: tuple,
                                do_all: bool, log: bool, show: bool, name_to_save: str, save: bool,
@@ -47,6 +48,8 @@ class LMFit:
         df_n = pd.DataFrame(index=[i + 1 for i in range(range_spike)], columns=letters[:func_class.n_params]).fillna(0)
         df_params = pd.DataFrame(index=[i + 1 for i in range(range_spike)]).fillna(0)
 
+        self.plot_data[cell_name] = {}
+
         if name_to_save not in self.func_dict:
             self.func_dict[name_to_save] = dict()
         if not do_all and not isinstance(chosen_cells, list):
@@ -61,6 +64,10 @@ class LMFit:
             x, data = self.data_class.define_axes(cell_name=cell_name, string=string,
                                                   do_all=do_all, chosen_cells=chosen_cells,
                                                   log=log, switch_axes=switch_axes)
+            self.plot_data[cell_name][spike] = {}
+
+            self.plot_data[cell_name][spike]["x"] = x
+            self.plot_data[cell_name][spike]["data"] = data
 
             result, chi_sqr = self.fit_the_function(func_class=func_class, param_values=param_values, x=x, data=data)
 
@@ -165,6 +172,7 @@ class LMFit:
                                                  "do_all": do_all, "name_to_save": name_to_save},
                    'df_n': df_n_json,
                    'df_params': df_params_json,
+                   'plotted_data': self.plot_data[cell_name]
                    }
 
             # evaluat = "evaluate" + plot_name + str(func_class.n_params) + '.xlsx'
