@@ -66,8 +66,8 @@ class LMFit:
                                                   log=log, switch_axes=switch_axes)
             self.plot_data[cell_name][spike] = {}
 
-            self.plot_data[cell_name][spike]["x"] = x.to_list()
-            self.plot_data[cell_name][spike]["data"] = data.to_list()
+            self.plot_data[cell_name][spike]["x"] = list(x)
+            self.plot_data[cell_name][spike]["data"] = list(data)
 
             result, chi_sqr = self.fit_the_function(func_class=func_class, param_values=param_values, x=x, data=data)
 
