@@ -48,13 +48,16 @@ class Plotter:
             all_dict = self.data_class.all_in_one_dict
             plt.scatter(all_dict[spike_name]["relative firing time"],
                         all_dict[spike_name]["IF"], c=color)
+            plt.xlim(0, 400)
         elif isinstance(chosen_cells, list):
             all_dict = self.data_class.all_in_one_dict_creating(gbz_dict=self.data_class.choose_cells, chosen_cells=chosen_cells)
             plt.scatter(all_dict[spike_name]["relative firing time"],
                         all_dict[spike_name]["IF"], c=color)
+            plt.xlim(0, 400)
         else:
             plt.scatter(self.dict[name][spike_name]["relative firing time"],
                         self.dict[name][spike_name]["IF"], c=color)
+            plt.xlim(0, 400)
         if all:
             plt.title("All spikes")
         else:
@@ -86,12 +89,14 @@ class Plotter:
                      10 ** final,
                      'r', c=colors[spike])
             plt.title(plot_name)
+            plt.xlim(0, 400)
             plt.xlabel("relative firing time")
             plt.ylabel("IF")
         else:
             plt.plot(x, data, 'o', c=colors[spike], label=f"{spike+1}.spike")
             plt.plot(np.linspace(np.min(x), np.max(x), 201), final, 'r', c=colors[spike])
             plt.title(plot_name)
+            plt.xlim(0, 400)
             plt.legend([f"{spike}.spike"])
             plt.xlabel("relative firing time")
             plt.ylabel("IF")
