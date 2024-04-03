@@ -66,8 +66,8 @@ class LMFit:
                                                   log=log, switch_axes=switch_axes)
             self.plot_data[cell_name][spike] = {}
 
-            self.plot_data[cell_name][spike]["x"] = x
-            self.plot_data[cell_name][spike]["data"] = data
+            self.plot_data[cell_name][spike]["x"] = list(x)
+            self.plot_data[cell_name][spike]["data"] = list(data)
 
             result, chi_sqr = self.fit_the_function(func_class=func_class, param_values=param_values, x=x, data=data)
 
@@ -166,13 +166,14 @@ class LMFit:
             plt.savefig(f"{file_param}.png")
             df_n_json = df_n.to_dict()
             df_params_json = df_params.to_dict()
+            plotted_data = self.plot_data[cell_name]
 
             out = {'arguments of the function': {"cell_name": cell_name, "func_class": str(func_class),
                                                  'param_values': param_values, "chosen_cells": chosen_cells,
                                                  "do_all": do_all, "name_to_save": name_to_save},
                    'df_n': df_n_json,
                    'df_params': df_params_json,
-                   'plotted_data': self.plot_data[cell_name]
+                   'plotted_data': plotted_data
                    }
 
             # evaluat = "evaluate" + plot_name + str(func_class.n_params) + '.xlsx'
